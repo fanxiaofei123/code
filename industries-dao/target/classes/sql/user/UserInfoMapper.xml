@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.user.UserInfoDao" >
+    <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.user.UserInfo" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="name != null" >
+                and name = #{name}
+            </if>
+
+            <if test="userPassword != null" >
+                and user_password = #{userPassword}
+            </if>
+        </trim>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, name, user_password
+    </sql>
+    <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.user.UserInfo" extends="BaseResultMap" />
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from t_user_info
+        where id = #{id}
+    </select>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        update t_user_info
+        where id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.youedata.cd.industries.pojo.user.UserInfo" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into t_user_info (name, user_password)
+        values (#{name}, #{userPassword})
+    </insert>
+    <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.user.UserInfo" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into t_user_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            id,
+            <if test="name != null" >
+                name,
+            </if>
+
+            <if test="userPassword != null" >
+                user_password,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id},
+            <if test="name != null" >
+                #{name},
+            </if>
+
+            <if test="userPassword != null" >
+                #{userPassword},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.user.UserInfo" >
+        update t_user_info
+        <set >
+            <if test="name != null" >
+                name = #{name},
+            </if>
+
+            <if test="userPassword != null" >
+                user_password = #{userPassword},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.user.UserInfo" >
+        select
+        <include refid="Base_Column_List" />
+        from t_user_info
+        <include refid="Example_Where_Clause" />
+        <include refid="common.Order_Type" />
+        <include refid="common.Mysql_Pagination_Limit" />
+    </select>
+    <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.user.UserInfo" >
+        select count(id) from t_user_info
+        <include refid="Example_Where_Clause" />
+    </select>
+    <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        from t_user_info
+        <include refid="Example_Where_Clause" />
+        <include refid="common.Order_Type" />
+        <include refid="common.Mysql_Pagination_Limit" />
+    </select>
+    <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+        select count(id) from t_user_info
+        <include refid="Example_Where_Clause" />
+    </select>
+    <insert id="batchInsert" parameterType="java.util.List" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into t_user_info (name
+        , user_password)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.name},
+             #{item.userPassword})
+        </foreach>
+    </insert>
+    <update id="batchDelete" parameterType="java.util.List" >
+        DELETE FROM t_user_info  WHERE id IN
+        <foreach collection="list" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from t_user_info
+    </select>
+    <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from t_user_info
+  </select>
+<select id="selectByName" resultType="com.youedata.cd.industries.pojo.user.UserInfo" parameterType="string" >
+   SELECT  name name,user_password userPassword,nickname  FROM  t_user_info WHERE `name` = #{name}
+  </select>
+</mapper>

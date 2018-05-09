@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.index.IndexRateDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.index.pojo.IndexRate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="rate" property="rate" jdbcType="DECIMAL" />
+    <result column="index_id" property="indexId" jdbcType="VARCHAR" />
+    <result column="industry_id" property="industryId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="rate != null" >
+         and rate = #{rate}
+      </if>
+      <if test="indexId != null" >
+         and index_id = #{indexId}
+      </if>
+      <if test="industryId != null" >
+         and industry_id = #{industryId}
+      </if>
+      <if test="createdTime != null" >
+         and created_time = #{createdTime}
+      </if>
+      <if test="isDeleted != null" >
+         and is_deleted = #{isDeleted}
+      </if>
+      <if test="updateTime != null" >
+         and update_time = #{updateTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, rate, index_id AS indexId, industry_id AS industryId, created_time AS createdTime, 
+    is_deleted AS isDeleted, update_time AS updateTime
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.index.pojo.IndexRate" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_rate
+    where id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update index_rate set is_deleted = 1 
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.index.pojo.IndexRate" >
+    <selectKey resultType="java.lang.String" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_rate (rate, index_id, industry_id, created_time, is_deleted, update_time
+      )
+    values (#{rate}, #{indexId}, #{industryId}, #{createdTime}, #{isDeleted}, #{updateTime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.index.pojo.IndexRate" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="indexId != null" >
+        index_id,
+      </if>
+      <if test="industryId != null" >
+        industry_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="rate != null" >
+        #{rate},
+      </if>
+      <if test="indexId != null" >
+        #{indexId},
+      </if>
+      <if test="industryId != null" >
+        #{industryId},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.index.pojo.IndexRate" >
+    update index_rate
+    <set >
+      <if test="rate != null" >
+        rate = #{rate},
+      </if>
+      <if test="indexId != null" >
+        index_id = #{indexId},
+      </if>
+      <if test="industryId != null" >
+        industry_id = #{industryId},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.index.pojo.IndexRate" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_rate
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.index.pojo.IndexRate" >
+    select count(id) from index_rate
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_rate
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from index_rate
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_rate (rate, 
+      index_id, industry_id, created_time, is_deleted, update_time
+      )
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(#{item.rate}, 
+      #{item.indexId}, #{item.industryId}, #{item.createdTime}, #{item.isDeleted}, #{item.updateTime}
+      )
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  index_rate set is_deleted = 1 WHERE id IN 
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_rate
+	where is_deleted = 0
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from index_rate
+	 where is_deleted=0
+  </select>
+</mapper>

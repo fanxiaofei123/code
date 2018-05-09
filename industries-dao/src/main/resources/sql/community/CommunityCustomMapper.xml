@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.community.CommunityDao" >
+  <!-- 根据Id查询企业-->
+  <select id="searchByPrimaryKey" resultMap="suResultMap" parameterType="com.youedata.cd.industries.query.BaseQuery">
+     SELECT tfull.eid eid,tfull.ename ename,tfull.major_business  major,tfull.address,tfull.blatitude elatitude ,tfull.blongitude elongitude,tfull.employee_count ecount
+    FROM t_full_info tfull
+     <include refid="conditionViewSql"></include>
+  </select>
+  <select id="searchCommunityByStreet" resultType="com.youedata.cd.industries.pojo.street.Street" parameterType="int">
+    SELECT id,name FROM t_community WHERE street_id = #{id}
+    ORDER BY  CONVERT (name USING gbk) COLLATE gbk_chinese_ci ASC
+  </select>
+  <select id="selectByCount" resultType="int" parameterType="com.youedata.cd.industries.query.BaseQuery">
+    SELECT COUNT(*) FROM t_community
+    <if test="streetId !=null and streetId != '' ">
+      WHERE street_id=#{streetId}
+    </if>
+  </select>
+  <resultMap id="suResultMap" type="com.youedata.cd.industries.pojo.community.Community">
+    <id  property="id" column="cid"></id>
+    <result  property="name" column="cname"></result>
+    <result  property="enterpriseCounts" column="ttnum"></result>
+    <collection property="enterprises"  javaType="list" ofType="com.youedata.cd.industries.pojo.enterprise.EnterpriseResult" >
+      <id  property="id" column="eid"></id>
+      <result property="name" column="ename"></result>
+      <result property="employeeCount" column="ecount"></result>
+      <result property="address" column="eaddress"></result>
+      <result property="latitude" column="elatitude"></result>
+      <result property="longitude" column="elongitude"></result>
+    </collection>
+  </resultMap>
+
+
+  <sql id="conditionViewSql">
+    <where>
+      <if test="streetId !=null and streetId != '' ">
+        and tfull.street_id=#{streetId}
+      </if>
+      <if test="enterpriseName !=null and enterpriseName != '' ">
+        and tfull.ename like CONCAT('%','${enterpriseName}','%' )
+      </if>
+      <if test="communityId !=null and communityId != ''">
+        and tfull.community_id =#{communityId}
+      </if>
+      <if test="buildingName !=null and buildingName !='' ">
+        and tfull.bname like CONCAT('%','${buildingName}','%' )
+      </if>
+      <if test="industryId !=null and industryId != '' ">
+        and tfull.industry_id =#{industryId}
+      </if>
+      <if test="categoryId !=null and categoryId != '' ">
+        and tfull.category_id =#{categoryId}
+      </if>
+      <if test="tradeId !=null and tradeId != '' ">
+        and tfull.trade_id =#{tradeId}
+      </if>
+    </where>
+  </sql>
+  <select id="findCommunityByStreet" parameterType="com.youedata.cd.industries.pojo.community.Community" resultType="com.youedata.cd.industries.pojo.community.Community">
+    select id,name
+    FROM t_community
+    WHERE street_id =
+    (SELECT id FROM t_street WHERE name = #{streetName})
+  </select>
+</mapper>

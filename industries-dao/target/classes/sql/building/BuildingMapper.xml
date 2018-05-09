@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.building.BuildingDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.building.Building" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="street_id" property="streetId" jdbcType="INTEGER" />
+    <result column="community_id" property="communityId" jdbcType="INTEGER" />
+    <result column="register_number" property="registerNumber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      tul.id = tb.upload_log_id
+      AND is_deleted = 0
+      <if test="name != null" >
+        and tb.name like '%${name}%'
+      </if>
+      <if test="address != null" >
+        and tb.address like '%${address}%'
+      </if>
+      <if test="uploadDate ==''">
+        and tul.date = #{uploadDate}
+      </if>
+      <if test="latitude != null" >
+        and tb.latitude = #{latitude}
+      </if>
+      <if test="longitude != null" >
+        and tb.longitude = #{longitude}
+      </if>
+      <if test="streetId != null" >
+        and tb.street_id = #{streetId}
+      </if>
+      <if test="communityId != null" >
+        and tb.community_id = #{communityId}
+      </if>
+      <if test="isDeleted != null" >
+        and is_deleted = #{isDeleted}
+      </if>
+      <if test="uploadDate == 1" >
+        and tb.upload_log_id = (
+        select id from t_upload_log
+        where type = 2  and success_count!=0
+        ORDER BY date desc limit 0,1
+        )
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+          tb.id as id,
+          tul.date as uploadDate,
+          tul.type as type,
+          tb.name as name,
+          tb.address as address,
+          ts.`name` as streetName,
+          tc.`name` as communityName,
+          tb.street_id AS streetId,
+          tb.community_id AS communityId,
+          tb.is_deleted AS isDeleted
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.building.Building" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from t_building
+    where id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update t_building set is_deleted = 1
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.industries.pojo.building.Building" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+      <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_building (name, address, latitude, longitude, street_id, community_id,is_deleted
+    )
+    values (#{name}, #{address}, #{latitude}, #{longitude}, #{streetId}, #{communityId},#{isDeleted}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.building.Building" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+      <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_building
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="streetId != null" >
+        street_id,
+      </if>
+      <if test="communityId != null" >
+        community_id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="streetId != null" >
+        #{streetId},
+      </if>
+      <if test="communityId != null" >
+        #{communityId},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.building.Building" >
+    update t_building
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="streetId != null" >
+        street_id = #{streetId},
+      </if>
+      <if test="communityId != null" >
+        community_id = #{communityId},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.building.Building" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    <include refid="Example_Where_Clause" />
+    <include refid="common.Order_Type" />
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.building.Building" >
+    select count(tb.id) FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    <include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    <include refid="Example_Where_Clause" />
+    <include refid="common.Order_Type" />
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(tb.id) FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    <include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+      <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_building (name,
+    address, latitude, longitude, street_id, community_id,is_deleted
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.name},
+      #{item.address}, #{item.latitude}, #{item.longitude}, #{item.streetId}, #{item.communityId},#{item.isDeleted}
+      )
+    </foreach>
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  t_building set is_deleted = 1 WHERE id IN
+    <foreach collection="list" item="ids"  open="(" separator="," close=")">
+      #{ids}
+    </foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    where tb.is_deleted=0
+    and tul.id=tb.upload_log_id and tul.type=2
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+     select count(tb.id) FROM
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    where tb.is_deleted=0
+    and tul.id=tb.upload_log_id and tul.type=2
+  </select>
+
+  <select id="queryBuildingInfo" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    SELECT
+    DISTINCT teb.name AS enterpriseName,
+      tb.`id` as id,
+      tb.`name` AS name,
+      tb.address AS address,
+      ts.`name` AS streetName,
+      tc.`name` AS communityName,
+      teb.id AS enterpriseId,
+      teb.register_number 
+    FROM
+    t_enterprise_log tel,
+      t_enterprise_base teb,
+      t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    WHERE
+    tel.building_id = tb.id
+    and teb.is_deleted=0
+    AND teb.id = tel.enterprise_id
+    AND tb.id = #{id}
+  </select>
+
+  <!-- 根据街道ID查找对应的社区信息 -->
+  <select id="queryByStreetId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+      SELECT
+	id AS communityId,
+	NAME AS communityName,
+	street_id AS streetId
+FROM
+	t_community
+WHERE
+	street_id = #{id}
+  </select>
+
+  <!--根据楼宇ID修改对应的街道、社区-->
+  <update id="updateByBuilding">
+  update t_building
+  <set >
+    <if test="name != null" >
+      name = #{name},
+    </if>
+    <if test="address != null" >
+      address = #{address},
+    </if>
+    <if test="latitude != null" >
+      latitude = #{latitude},
+    </if>
+    <if test="longitude != null" >
+      longitude = #{longitude},
+    </if>
+      street_id = #{streetId},
+      community_id = #{communityId},
+  </set>
+    where is_deleted=0 and id = #{id}
+  </update>
+  <!--  删除楼宇相关的信息  -->
+  <delete id="delBuildingInfo" parameterType="java.util.Map">
+  	delete from t_enterprise_log
+  	where building_id =#{id} and street_id=#{streetId} and community_id=#{communityId}
+  </delete>
+
+  <!-- 根据了楼宇ID查找下面对应的企业数量 -->
+  <select id="queryEnterpriseCount" resultType="java.lang.Long" parameterType="java.lang.Long">
+    SELECT
+    count(DISTINCT teb.name)
+    FROM
+    t_enterprise_log tel,
+    t_enterprise_base teb,
+    t_upload_log tul,
+    t_building tb
+    LEFT JOIN  t_community tc
+    on tb.community_id = tc.id
+    LEFT JOIN t_street ts
+    on tb.street_id = ts.id
+    WHERE tel.building_id = tb.id
+    AND teb.id = tel.enterprise_id
+    AND tb.id = #{id}
+  </select>
+  
+  <!-- 删除企业关系 -->
+  <delete id="delEnterpirseInfo">
+  	<if test="array!=null">
+	  	delete from t_enterprise_log
+		where enterprise_id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+			#{item}   
+		</foreach> 
+	</if>
+  </delete>
+  <update id="updateByAddress" parameterType="com.youedata.cd.industries.dto.excel.BuildingDataUpdatesDto">
+    update t_building
+    <set >
+
+      <if test="buildingName != null and buildingName != ''" >
+        name = #{buildingName},
+      </if>
+      <if test="streetId != null and streetId != ''">
+        street_id = #{streetId},
+      </if>
+      <if test="communityId != null and communityId != ''">
+        community_id = #{communityId},
+      </if>
+      <if test="logId != null and logId != ''">
+        upload_log_id = #{logId},
+      </if>
+      <if test="longitude != null and longitude != ''">
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null and latitude != ''">
+        latitude = #{latitude},
+      </if>
+      is_deleted=0
+    </set>
+    where address = #{address}
+  </update>
+  <insert id="insertById"  useGeneratedKeys="true" keyProperty="id"  parameterType="com.youedata.cd.industries.dto.excel.BuildingDataUpdatesDto">
+    insert into t_building (id, name, address, street_id, community_id,upload_log_id,longitude,latitude,is_deleted
+    )
+    values (#{id}, #{buildingName}, #{address}, #{streetId}, #{communityId},#{logId},#{longitude},#{latitude},0
+    )
+  </insert>
+
+  <insert id="insertFailBuilding" parameterType="com.youedata.cd.industries.dto.excel.BuildingDataUpdatesDto">
+    INSERT INTO t_failed_building (building_name,address,street,community,register_number,log_id,error_column)VALUES (
+    #{buildingName},#{address},#{street},#{community},#{enRegisterNumbers},#{logId},#{errorColumn}
+    )
+  </insert>
+  
+  
+</mapper>

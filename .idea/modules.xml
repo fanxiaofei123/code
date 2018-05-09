@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/code.iml" filepath="$PROJECT_DIR$/.idea/code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-common/industries-common.iml" filepath="$PROJECT_DIR$/industries-common/industries-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-dao/industries-dao.iml" filepath="$PROJECT_DIR$/industries-dao/industries-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-msg/industries-msg.iml" filepath="$PROJECT_DIR$/industries-msg/industries-msg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-pojo/industries-pojo.iml" filepath="$PROJECT_DIR$/industries-pojo/industries-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-service/industries-service.iml" filepath="$PROJECT_DIR$/industries-service/industries-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-web/industries-web.iml" filepath="$PROJECT_DIR$/industries-web/industries-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/industries-web-admin/industries-web-admin.iml" filepath="$PROJECT_DIR$/industries-web-admin/industries-web-admin.iml" />
+    </modules>
+  </component>
+</project>

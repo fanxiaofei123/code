@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.enterprise.EnterpriseDtoFailDao" >
+  <select id="selectEnterpriseDtoByLogId"  parameterType="int"  resultType="com.youedata.cd.industries.dto.excel.EnterpriseDataUpdatesDto" >
+    SELECT  id,register_number as registerNumber,enterprise_name as enterpriseName,hangye_code as hangyeEncode,chanye,hangye,menlei,
+     main_business as mainBusiness,employee_number as employeeNumber,phone,register_date as registerDate,register_moneny as registerMoneny,
+      status,address,street,community,error_result as errorColumn FROM  t_failed_enterprise  WHERE log_id = #{id}
+  </select>
+  <select id="selectChangeRecruitmentUpdatesDtoByLogId"  parameterType="int"  resultType="com.youedata.cd.industries.dto.excel.ChangeRecruitmentUpdatesDto" >
+    SELECT  id,enterprise_name as name,change_date as date,address,error_column as errorColumn FROM  t_failed_changeinfo  WHERE log_id = #{id}
+  </select>
+</mapper>

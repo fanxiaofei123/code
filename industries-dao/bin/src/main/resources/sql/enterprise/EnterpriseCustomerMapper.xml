@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.enterprise.EnterpriseDao" >
+    <sql id="base_column_sql">
+      tfull.eid eid,
+      tfull.address eladdress,
+      tfull.ename ename,
+      tfull.employee_count ecounts,
+      tfull.phone_number epnumber,
+      tfull.address teba,
+      tfull.major_business elbusiness,
+      tfull.elatitude elatitude,
+      tfull.elongitude  elongitude
+    </sql>
+
+
+    <update id="updateSourceId" parameterType="Map" >
+        UPDATE t_enterprise_base
+        <set >
+            <if test="sourceId != null" >
+                source_log_id = #{sourceId},
+            </if>
+            <if test="isModifyLog != null" >
+                is_modify_log = #{isModifyLog},
+            </if>
+        </set>
+        WHERE id=#{baseId}
+    </update>
+
+  <select id="selectByQuery" resultMap="suReultMap"  parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery">
+      SELECT
+      <include refid="base_column_sql"></include>,
+      tfull.cid cid,
+      tfull.register_capital eca,
+      tfull.open_flag openflag,
+      tfull.register_time etime,
+      tfull.street_id street_id,
+      tca.name tradename
+      FROM  t_full_info tfull
+      LEFT JOIN t_category tca
+      ON tfull.trade_id = tca.id
+      <include refid="conditionViewSql"></include>
+    <if test="start !=null  and limit!=null">
+      ORDER BY
+      CONVERT (tfull.ename USING gbk) COLLATE gbk_chinese_ci ASC
+      limit #{start},#{limit}
+    </if>
+  </select>
+
+
+  <select id="selectByCount" resultType="int" parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery">
+      SELECT count(DISTINCT tfull.eid)
+      FROM  t_full_info tfull
+      <include refid="conditionViewSql"></include>
+  </select>
+
+
+    <!--企业变更查询-->
+    <select id="getChangeEnterprise"  resultMap="suReultMap" parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery" >
+        SELECT
+        tfull.eid eid,
+        tfull.ename,
+        tfull.major_business elbusiness,
+        tfull.address eladdress,
+        tfull.clongitude longitude,
+        tfull.clatitude latitude
+        FROM t_full_info tfull
+        LEFT JOIN (
+        select DISTINCT enterprise_id id FROM  t_enterprise_log
+        WHERE  address_modify_flag =1
+        )tel
+        ON tfull.eid = tel.id
+        <include refid="conditionViewSql"></include>
+        AND  tel.id IS NOT NULL
+        ORDER BY tfull.change_date
+        <if test="start !=null  and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+
+<!--    企业变更数目-->
+    <select id="getChangeEnterpriseCounts" resultType="int" parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery">
+        SELECT
+       COUNT(tfull.eid)
+        FROM t_full_info tfull
+        LEFT JOIN (
+        select DISTINCT enterprise_id id FROM  t_enterprise_log
+        WHERE  address_modify_flag =1
+        )tel
+        ON tfull.eid = tel.id
+        <include refid="conditionViewSql"></include>
+        AND  tel.id IS NOT NULL
+        ORDER BY tfull.change_date
+    </select>
+
+
+    <!--通过id查询企业详情-->
+    <select id="selectEnterpriseById"  resultType="com.youedata.cd.industries.pojo.enterprise.Enterprise" parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery" >
+        SELECT
+        tfull.ename name,
+        tfull.blatitude latitude,
+        tfull.blongitude  longitude ,
+        tfull.phone_number phoneNumber,
+        tfull.address address,
+        tfull.major_business majorBusiness,
+        tfull.source_log_id  sourceLogId,
+        tca.name  tradeName,
+        tfull.employee_count employeeCount
+        FROM t_full_info tfull
+        LEFT  JOIN  t_category tca
+        ON  tfull.trade_id = tca.id
+        WHERE tfull.eid = #{id}
+    </select>  <!--通过id查询企业详情-->
+
+
+
+
+    <resultMap id="suReultMap" type="com.youedata.cd.industries.pojo.enterprise.EnterpriseResult">
+        <id property="id" column="eid"></id>
+        <result property="name" column="ename"></result>
+        <result property="communityId" column="cid"></result>
+        <result property="majorBusiness" column="elbusiness"></result>
+        <result property="openFlag" column="openflag"></result>
+        <result property="address" column="eladdress"></result>
+        <result property="oldMajorBusiness" column="elcmajor"></result>
+        <result property="oldAddress" column="elcaddress"></result>
+        <result property="latitude" column="elatitude"></result>
+        <result property="longitude" column="elongitude"></result>
+        <result property="registerTime" column="etime"></result>
+        <result property="registerCapital" column="eca"></result>
+        <result property="majorBussinessChange" column="majorFlag"></result>
+        <result property="addressChange" column="addressFlag"></result>
+        <result property="employeeCount" column="ecounts"></result>
+        <result property="phoneNumber" column="epnumber"></result>
+        <result property="tradeName" column="tradename"></result>
+        <result property="streetId" column="street_id"></result>
+    </resultMap>
+
+
+    <sql id="conditionViewSql">
+        <where>
+            <if test="id !=null and id != '' ">
+                and tfull.building_id=#{id}
+            </if>
+            <if test="streetId !=null and streetId != '' ">
+                and tfull.street_id=#{streetId}
+            </if>
+            <if test="enterpriseName !=null and enterpriseName != '' ">
+                and tfull.ename like CONCAT(CONCAT('%',#{enterpriseName}),'%')
+            </if>
+            <if test="communityId !=null and communityId != ''">
+                and tfull.community_id =#{communityId}
+            </if>
+            <if test="buildingName !=null and buildingName !='' ">
+                and tfull.bname like CONCAT(CONCAT('%',#{buildingName}),'%' )
+            </if>
+            <if test="industryId !=null and industryId != '' ">
+                and tfull.industry_id =#{industryId}
+            </if>
+            <if test="categoryId !=null and categoryId != '' ">
+                and tfull.category_id =#{categoryId}
+            </if>
+            <if test="tradeId !=null and tradeId != '' ">
+                and tfull.trade_id =#{tradeId}
+            </if>
+            <if test="isModifyLog !=  0 and startTime != null and endTime != null">
+                and (tfull.change_date BETWEEN #{startTime} AND #{endTime} )
+            </if>
+
+            <if test="isModifyLog != null">
+                AND tfull.is_modify_log = #{isModifyLog}
+            </if>
+
+            <if test="true">
+                and (tfull.e_is_deleted = 0)
+            </if>
+
+        </where>
+    </sql>
+
+    <!--插入一条t_enterprise_base数据-->
+    <insert id="insetEnterpriseData" useGeneratedKeys="true" keyProperty="id"  parameterType="com.youedata.cd.industries.dto.excel.EnterpriseDataUpdatesDto">
+        INSERT INTO t_enterprise_base (
+            register_number,
+            NAME,
+            industry_id,
+            trade_id,
+            category_id,
+            register_major_business,
+            employee_count,
+            phone_number,
+            register_time,
+            register_capital,
+            open_flag,
+            register_address,
+            create_time,
+            upload_log_id,
+            is_deleted,
+            source_log_id
+        )
+        VALUES
+            (
+                #{registerNumber},
+                #{enterpriseName},
+                #{chanyeId},
+                #{hangyeId},
+                #{menleiId},
+                #{mainBusiness},
+                #{employeeNumber},
+                #{phone},
+                #{registerDate},
+                #{registerMoneny},
+                #{status},
+                #{address},
+                NOW(),
+                #{logId},
+                0,
+                #{sourceId}
+            )
+    </insert>
+
+    <!--插入一条t_enterprise_log 数据-->
+    <insert id="insetEnterpriseLog" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseLog">
+        INSERT INTO t_enterprise_log (
+            id,
+            enterprise_id,
+            community_id,
+            street_id,
+            version_id,
+            major_business,
+            address,
+            address_modify_flag,
+            major_business_modify_flag,
+            latitude,
+            longitude
+        )
+        VALUES
+            (
+                #{id},#{enterpriseId},#{communityId},#{streetId},#{versionId},#{majorBusiness},#{address},#{addressModifyFlag},
+                #{majorBusinessModifyFlag},#{latitude},#{longitude}
+                )
+    </insert>
+
+    <!--根据registerNumber查找id-->
+    <select id="selectByRegisterNumber" resultType="String" parameterType="String">
+        SELECT id FROM t_enterprise_base WHERE register_number=#{registerNumber}
+    </select>
+
+    <!--更新t_enterprise_Base表数据-->
+    <update id="updatesEnterpriseBaseById" parameterType="com.youedata.cd.industries.dto.excel.EnterpriseDataUpdatesDto">
+        UPDATE t_enterprise_base set id=#{id}
+        ,is_deleted=0
+        <if test="enterpriseName != null and enterpriseName!= '' ">
+            ,name=#{enterpriseName}
+        </if>
+        <if test="hangyeEncode != null and hangyeEncode!= '' ">
+            ,industry_code=#{hangyeEncode}
+        </if>
+        <if test="chanyeId != null and chanyeId!= '' ">
+            ,industry_id=#{chanyeId}
+        </if>
+        <if test="hangye != null and hangye!= '' ">
+            ,trade_id=#{hangyeId}
+        </if>
+        <if test="menleiId != null and menleiId!= '' ">
+            ,category_id=#{menleiId}
+        </if>
+        <if test="mainBusiness != null and mainBusiness!= '' ">
+            ,register_major_business=#{mainBusiness}
+        </if>
+        <if test="employeeNumber != null and employeeNumber!= '' ">
+            ,employee_count=#{employeeNumber}
+        </if>
+        <if test="phone != null and phone!= '' ">
+            ,phone_number=#{phone}
+        </if>
+        <if test="registerDate != null and registerDate!= '' ">
+            ,register_time=#{registerDate}
+        </if>
+        <if test="registerMoneny != null and registerMoneny!= '' ">
+            ,register_capital=#{registerMoneny}
+        </if>
+        <if test="status != null and status!= '' ">
+            ,open_flag=#{status}
+        </if>
+        <if test="logId != null and logId!= '' ">
+            ,upload_log_id=#{logId}
+        </if>
+        WHERE id=#{id}
+    </update>
+
+    <!--更新t_enterprise_log表数据-->
+    <update id="updatesEnterpriseLogById">
+        UPDATE t_enterprise_log set enterprise_id=#{enterpriseId}
+        <if test="address != null and address!= '' ">
+            ,address=#{address}
+        </if>
+        <if test="communityId != null and communityId!= '' ">
+            ,community_id=#{communityId}
+        </if>
+        <if test="streetId != null and streetId!= '' ">
+            ,street_id=#{streetId}
+        </if>
+        <if test="latitude != null and latitude!= '' ">
+            ,latitude=#{latitude}
+        </if>
+        <if test="longitude != null and longitude!= '' ">
+            ,longitude=#{longitude}
+        </if>
+        WHERE enterprise_id=#{enterpriseId} and version_id=1
+    </update>
+
+    <insert id="insertUploadLog"  useGeneratedKeys="true" keyProperty="id"  parameterType="com.youedata.cd.industries.pojo.log.UploadLog">
+      insert into t_upload_log(date,success_count,fail_count,type)VALUES(NOW(),#{successCount},#{failCount},#{type})
+    </insert>
+
+    <insert id="insertFailList" parameterType="List">
+
+        INSERT INTO t_failed_enterprise (register_number,enterprise_name,hangye_code,chanye,hangye,menlei,main_business,
+        employee_number,phone,register_date,register_moneny,status,address,street,community,error_result,log_id)VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+
+        (#{item.registerNumber},#{item.enterpriseName},#{item.hangyeEncode},#{item.chanye},#{item.hangye},#{item.menlei},#{item.mainBusiness},
+            #{item.employeeNumber},
+        #{item.phone},#{item.registerDate},#{item.registerMoneny},#{item.status},#{item.address},#{item.street},#{item.community},#{item.errorColumn},#{item.logId})
+        </foreach>
+    </insert>
+
+    <select id="findByEnterpriseId" parameterType="String" resultType="com.youedata.cd.industries.pojo.enterprise.EnterpriseLog">
+        SELECT
+            id,
+            enterprise_id AS enterpriseId,
+            major_business AS majorBusiness,
+            address,
+            address_modify_flag AS addressModifyFlag,
+            major_business_modify_flag AS majorBusinessModifyFlag,
+            building_id AS buildingId,
+            community_id AS communityId,
+            street_id AS streetId,
+            version_id AS versionId
+        FROM
+            t_enterprise_log
+        WHERE
+            enterprise_id = #{enterpriseId}
+            ORDER BY change_date desc limit 0,1
+    </select>
+
+
+    <!--lzs-->
+    <select id="selectByQuery1" resultMap="suReultMap" parameterType="java.util.Map">
+        SELECT
+        <include refid="base_column_sql"></include>,
+        tfull.cid cid,
+        tfull.register_capital eca,
+        tfull.open_flag openflag,
+        tfull.register_time etime,
+        tfull.street_id street_id,
+        tca.name tradename
+        FROM t_full_info tfull
+        LEFT JOIN t_category tca
+        ON tfull.trade_id = tca.id
+        <include refid="conditionViewSql1"></include>
+        <if test="start !=null  and limit!=null">
+            ORDER BY
+            CONVERT (tfull.ename USING gbk) COLLATE gbk_chinese_ci ASC
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+
+    <select id="selectByCount1" resultType="int" parameterType="java.util.Map">
+        SELECT count(DISTINCT tfull.eid)
+        FROM t_full_info tfull
+        <include refid="conditionViewSql1"></include>
+    </select>
+
+    <sql id="conditionViewSql1">
+        <where>
+            <if test="industry_id_1 !=null and industry_id_1 != '' ">
+                or tfull.industry_id=1
+            </if>
+            <if test="industry_id_2 !=null and industry_id_2 != ''">
+                or tfull.industry_id=2
+            </if>
+            <if test="industry_id_3 !=null and industry_id_3 !='' ">
+                or tfull.industry_id=3
+            </if>
+            <if test="id !=null and id != '' ">
+                and tfull.building_id=#{id}
+            </if>
+            <if test="streetId !=null and streetId != '' ">
+                and tfull.street_id=#{streetId}
+            </if>
+            <if test="enterpriseName !=null and enterpriseName != '' ">
+                and tfull.ename like CONCAT(CONCAT('%',#{enterpriseName}),'%')
+            </if>
+            <if test="communityId !=null and communityId != ''">
+                and tfull.community_id =#{communityId}
+            </if>
+            <if test="buildingName !=null and buildingName !='' ">
+                and tfull.bname like CONCAT(CONCAT('%',#{buildingName}),'%' )
+            </if>
+            <if test="industryId !=null and industryId != '' ">
+                and tfull.industry_id =#{industryId}
+            </if>
+            <if test="categoryId !=null and categoryId != '' ">
+                and tfull.category_id =#{categoryId}
+            </if>
+            <if test="tradeId !=null and tradeId != '' ">
+                and tfull.trade_id =#{tradeId}
+            </if>
+            <if test="isModifyLog !=  0 and startTime != null and endTime != null">
+                and (tfull.change_date BETWEEN #{startTime} AND #{endTime} )
+            </if>
+
+            <if test="isModifyLog != null">
+                AND tfull.is_modify_log = #{isModifyLog}
+            </if>
+
+            <if test="true">
+                and (tfull.e_is_deleted = 0)
+            </if>
+
+        </where>
+    </sql>
+</mapper>

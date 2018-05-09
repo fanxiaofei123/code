@@ -1,0 +1,248 @@
+.g-hd {
+    background-color: #FFFFFF;
+    border-bottom: 9px solid #3287AC;
+}
+
+.u-item {
+    background-color: white;
+}
+
+#selectEnOrBd {
+    background-color: #3287AC;
+}
+
+.g-ft {
+    background-color: white;
+    position: static;
+}
+
+.g-ft > p {
+    color: black;
+}
+
+.g-sd {
+    border: 0;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    background-color: #035F86;
+}
+
+.g-hd .m-nav li.active > a, .g-hd .m-nav li a:hover {
+    color: white;
+    background-color: #3287AC;
+}
+
+.g-hd .m-nav li > a, .g-hd .m-nav li a {
+    color: black;
+    background-color: white;
+}
+
+.g-sdc .u-item, .g-sdc .u-sch {
+    border: 0
+}
+
+.g-sdc .u-list, .g-sdc .u-ct {
+    top: 358px;
+    width: 355px;
+    height: 50%;
+}
+
+.change-title {
+    background-color: #035F86;
+    top: 60px;
+    position: relative;
+}
+
+.change-title > div {
+    padding: 15px 40px 15px 0;
+    display: inline-block;
+    color: #14B6FE;
+    font-size: 16px;
+}
+
+.change-title > div:nth-child(1) {
+    padding-left: 80px;
+    font-size: medium;
+    color: #14B6FE;
+    cursor: pointer;
+    /*margin-left: 60%;*/
+}
+
+.change-title > div:nth-child(1):hover {
+    color: white;
+    cursor: pointer;
+}
+
+.change-title > div:nth-child(2) {
+    position: fixed;
+    right: 0;
+    top: 60px;
+}
+
+.change-title > div:nth-child(2) > div {
+    display: inline-block;
+    color: #14B6FE;
+    cursor: pointer;
+    padding-right: 40px;
+    font-size: large;
+}
+
+.change-title > div:nth-child(2) > div:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.triangle {
+    position: absolute;
+    border: 1px solid transparent;
+    border-width: 9px 9px;
+    border-top-color: #035F86;
+    display: none;
+}
+
+.a {
+    left: 180px;
+    display: block;
+}
+
+.d {
+    right: 110px;
+    display: block;
+}
+
+.e {
+    left: 41px;
+    display: block;
+}
+
+.c {
+    right: 220px;
+    display: block;
+}
+
+.b {
+    right: 340px;
+    display: block;
+}
+
+#main {
+    background-color: #F9F9F9;
+    height: 100%;
+    width: 100%;
+    padding-top: 120px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#main > div {
+    font-size: medium;
+    word-wrap: break-word;
+}
+
+#left {
+    /*width: 71%;*/
+    /*left: 80px;*/
+    border: solid silver thin;
+    background-color: white;
+}
+
+#right {
+    width: 16%;
+    right: 80px;
+}
+
+#title {
+    padding-left: 60px;
+    padding-top: 22px;
+    background-color: #F9F9F9;
+    height: 70px;
+    color: #055A7F;
+}
+
+#mainContent {
+    padding: 22px 60px 22px 60px;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+.box {
+    width: 100%;
+    border: solid silver thin;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.box > .title {
+    padding-left: 20px;
+    padding-top: 10px;
+    background-color: #F9F9F9;
+    height: 40px;
+    font-size: small;
+}
+
+.box > .content {
+    padding: 10px 20px 16px 20px;
+}
+
+/*=======标签======*/
+.tab {
+    height: 50px;
+    margin-left: -15px;
+    margin-right: -15px;
+    background: #F9F9F9;
+}
+
+.tab > div {
+    float: left;
+    width: 100px;
+    /*background: #035F86;*/
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #14B6FE;
+    position: relative;
+    cursor: pointer;
+}
+
+.tab > div:hover {
+    background: #035F86;
+    /*color: #fff;*/
+}
+
+.tab > div:hover i.triangle {
+    display: block;
+}
+
+.tab > div > i.triangle {
+    top: 50px;
+    left: 40px;
+}
+
+.tab > div.active {
+    background: #035F86;
+}
+
+.tab > div.active > i.triangle {
+    top: 50px;
+    left: 40px;
+    display: block;
+}
+
+.industryClick {
+    cursor: pointer
+}
+
+html, body {
+    width: 100%;
+    height: auto;
+    overflow: auto;
+    margin: 0;
+}
+
+.more-describe {
+    color: #c09853;
+    cursor: pointer;
+}
+.more-describe:hover {
+    color: #428bca;
+}

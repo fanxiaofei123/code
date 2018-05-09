@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.index.IndexDataDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.index.pojo.IndexData" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="indexId" property="indexId" jdbcType="BIGINT" />
+    <result column="enterpriseId" property="enterpriseId" jdbcType="BIGINT" />
+    <result column="industryId" property="industryId" jdbcType="BIGINT" />
+    <result column="tradeId" property="tradeId" jdbcType="BIGINT" />
+    <result column="data" property="data" jdbcType="DECIMAL" />
+    <result column="rawData" property="rawData" jdbcType="DECIMAL" />
+    <result column="startTime" property="startTime" jdbcType="VARCHAR" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+    <result column="isDeleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="createdTime" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="id != null and id != ''" >
+         and id = #{id}
+      </if>
+      <if test="indexId != null and indexId != ''" >
+        and index_id = #{indexId}
+      </if>
+      <if test="enterpriseId != null and enterpriseId != ''" >
+        and enterprise_id = #{enterpriseId}
+      </if>
+      <if test="industryId != null and industryId != ''" >
+        and industry_id = #{industryId}
+      </if>
+      <if test="tradeId != null and tradeId != ''" >
+        and trade_id = #{tradeId}
+      </if>
+      <if test="rawData != null and rawData != ''" >
+        and raw_data = #{rawData}
+      </if>
+        <if test="startTime != null and startTime != ''" >
+            and start_time = #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''" >
+            and end_time = #{endTime}
+        </if>
+      <if test="data != null and data != ''" >
+         and data = #{data}
+      </if>
+      <if test="isDeleted != null" >
+         and is_deleted = #{isDeleted}
+      </if>
+      <if test="createdTime != null and createdTime != ''" >
+         and created_time = #{createdTime}
+      </if>
+      <if test="updateTime != null and updateTime != ''" >
+         and update_time = #{updateTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id,enterprise_id AS enterpriseId, index_id AS indexId,industry_id AS industryId,trade_id AS tradeId ,raw_data AS rawData, data,
+     start_time AS startTime, end_time AS endTime, is_deleted AS isDeleted,
+    created_time AS createdTime, update_time AS updateTime
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.index.pojo.IndexData" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_data
+    where is_deleted = 0 and id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    update index_data set is_deleted = 1 
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.index.pojo.IndexData" useGeneratedKeys="true" keyProperty="id" >
+    insert into index_data (enterprise_id,index_id,industry_id,trade_id,raw_data, data, start_time, end_time, is_deleted, created_time, update_time)
+    values (#{enterpriseId},#{indexId},#{industryId},#{tradeId},#{rawData}, #{data}, #{startTime},#{endTime}, #{isDeleted}, #{createdTime}, #{updateTime})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.youedata.cd.index.pojo.IndexData" >
+    <selectKey resultType="java.lang.String" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+insert into index_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        index_id,
+      </if>
+      <if test="enterpriseId != null" >
+        enterprise_id,
+      </if>
+      <if test="industryId != null" >
+        industry_id,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="rawData != null" >
+        raw_data,
+      </if>
+      <if test="data != null" >
+        data,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        #{indexId},
+      </if>
+      <if test="enterpriseId != null" >
+        #{enterpriseId},
+      </if>
+      <if test="industryId != null" >
+        #{industryId},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId},
+      </if>
+      <if test="rawData != null" >
+        #{rawData},
+      </if>
+      <if test="data != null" >
+        #{data},
+      </if>
+      <if test="startTime != null" >
+        #{startTime},
+      </if>
+      <if test="endTime != null" >
+        #{endTime},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.index.pojo.IndexData" >
+    update index_data
+    <set >
+      <if test="indexId != null" >
+        index_id = #{indexId},
+      </if>
+      <if test="enterpriseId != null" >
+        enterprise_id = #{enterpriseId},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId},
+      </if>
+      <if test="industryId != null" >
+        industry_id = #{industryId},
+      </if>
+      <if test="rawData != null" >
+        raw_data = #{rawData},
+      </if>
+      <if test="data != null" >
+        data = #{data},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.index.pojo.IndexData" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_data
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.index.pojo.IndexData" >
+    select count(id) from index_data
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_data
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from index_data
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_data (id, index_id, enterprise_id,industry_id,trade_id,raw_data,
+      data, start_time, end_time, is_deleted, created_time, update_time
+      )
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+     (#{item.indexId}, #{item.enterpriseId}, #{item.industryId}, #{item.tradeId}, #{item.rawData},
+      #{item.data}, #{item.startTime}, #{item.endTime}, #{item.isDeleted}, #{item.createdTime}, #{item.updateTime}
+      )
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  index_data set is_deleted = 1 WHERE id IN 
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_data
+	where index_id =id and is_deleted = 0
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from index_data
+	 where is_deleted=0
+  </select>
+  
+  <!-- 获取年度 -->
+  <select id="selectAnnual" resultType="java.util.Map" >
+  	SELECT left(start_time,4) annual FROM index_data WHERE is_deleted = 0 GROUP BY left(start_time,4) ORDER BY left(start_time,4);
+  </select>
+  
+  <!-- 获取id -->
+	<select id="getId" parameterType="java.lang.String" resultType="java.lang.String" >
+   		select id from index_data where id = #{id}
+	</select>
+  
+  <!-- 添加 -->
+	<insert id="importData_add" parameterType="com.youedata.cd.index.pojo.IndexData">
+		insert into
+		index_data (id, index_id,enterprise_id,industry_id,trade_id,data,raw_data, start_time, end_time, location_id, created_time, update_time)
+		values (#{id},#{indexId}, #{enterpriseId},#{industryId},#{tradeId},#{data},#{rawData}, #{startTime}, #{endTime}, #{isDeleted}, #{createdTime}, #{updateTime})
+	</insert>
+	<!-- 修改 -->
+  <update id="importData_update" parameterType="com.youedata.cd.index.pojo.IndexData">
+		UPDATE index_data set
+		index_id = #{indexId}, enterprise_id = #{enterpriseId}, industry_id = #{industryId}, trade_id = #{tradeId}, data = #{data}, raw_data = #{rawData},
+		start_time = #{startTime}, end_time = #{endTime},
+		is_deleted = #{isDeleted}, created_time = #{createdTime}, update_time = #{updateTime}
+		WHERE id = #{id}
+	</update>
+
+  <!-- 通过指数对象参数过滤查询 -->
+  <select id="getByMap" parameterType="com.youedata.cd.index.pojo.IndexData" resultType="com.youedata.cd.index.pojo.IndexData">
+    select id,enterprise_id AS enterpriseId, index_id AS indexId,industry_id AS industryId,trade_id AS tradeId ,raw_data AS rawData,`data`, start_time AS startTime,
+    end_time AS endTime, is_deleted AS isDeleted, created_time AS createdTime, update_time AS updateTime
+    from index_data
+    <include refid="Example_Where_Clause" />
+  </select>
+
+  <!-- 通过时间段查询并根据指标定义id分组取最大 -->
+  <select id="getMaxByMap" parameterType="com.youedata.cd.index.pojo.IndexData" resultType="com.youedata.cd.index.pojo.IndexData">
+    select id,enterprise_id AS enterpriseId, index_id AS indexId,industry_id AS industryId,trade_id AS tradeId ,max(raw_data) AS rawData,`data`, start_time AS startTime,
+    end_time AS endTime, is_deleted AS isDeleted, created_time AS createdTime, update_time AS updateTime
+    from index_data
+    <include refid="Example_Where_Clause" />
+    GROUP BY index_id
+  </select>
+  <!-- 通过时间段查询并根据指标定义id分组取最小值 -->
+  <select id="getMinByMap" parameterType="com.youedata.cd.index.pojo.IndexData" resultType="com.youedata.cd.index.pojo.IndexData">
+    select id,enterprise_id AS enterpriseId, index_id AS indexId,industry_id AS industryId,trade_id AS tradeId ,min(raw_data) AS rawData,`data`, start_time AS startTime,
+    end_time AS endTime, is_deleted AS isDeleted, created_time AS createdTime, update_time AS updateTime
+    from index_data
+    <include refid="Example_Where_Clause" />
+    GROUP BY index_id
+  </select>
+
+    <select id="getEnterpriseDataList" parameterType="com.youedata.cd.index.pojo.IndexData" resultType="com.youedata.cd.index.pojo.IndexData">
+        select b.enterprise_id AS enterpriseId, b.industry_id AS industryId, b.trade_id AS tradeId,b.start_time AS startTime,b.end_time AS endTime from t_enterprise_base a, index_data b where b.is_deleted =0 and a.id = b.enterprise_id
+        GROUP BY b.enterprise_id, b.industry_id, b.trade_id, b.start_time, b.end_time
+        <include refid="Example_Where_Clause" />
+   </select>
+
+    <!-- 通过开始时间排序（降序） -->
+    <select id="getByStartTimeDesc" parameterType="com.youedata.cd.index.pojo.IndexData" resultType="com.youedata.cd.index.pojo.IndexData">
+        select id,enterprise_id AS enterpriseId, index_id AS indexId,industry_id AS industryId,trade_id AS tradeId ,min(raw_data) AS rawData,`data`, start_time AS startTime,
+        end_time AS endTime, is_deleted AS isDeleted, created_time AS createdTime, update_time AS updateTime
+        from index_data
+        <include refid="Example_Where_Clause" />
+        GROUP BY start_time DESC
+    </select>
+
+   <select id="getDataEnterpriseByMap" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        index_id as indexId,
+        data,
+        CASE
+        WHEN SUBSTRING(start_time, 5) = '0101000000'
+        AND SUBSTRING(end_time, 5) = '0331000000' THEN
+        concat(
+        LEFT (start_time, 4),
+        'Q1'
+        )
+        WHEN SUBSTRING(start_time, 5) = '0401000000'
+        AND SUBSTRING(end_time, 5) = '0630000000' THEN
+        concat(
+        LEFT (start_time, 4),
+        'Q2'
+        )
+        WHEN SUBSTRING(start_time, 5) = '0701000000'
+        AND SUBSTRING(end_time, 5) = '0930000000' THEN
+        concat(
+        LEFT (start_time, 4),
+        'Q3'
+        )
+        WHEN SUBSTRING(start_time, 5) = '1001000000'
+        AND SUBSTRING(end_time, 5) = '1231000000' THEN
+        concat(
+        LEFT (start_time, 4),
+        'Q4'
+        )
+        END AS quarter
+        FROM
+        index_data
+        WHERE
+        is_deleted = 0
+        and start_time = #{startTime}
+        and end_time = #{endTime}
+        and enterprise_id = #{enterpriseId}
+        and index_id = #{indexId}
+        <if test="industryId != null and industryId != ''" >
+            and industry_id = #{industryId}
+        </if>
+        <if test="tradeId != null and tradeId != ''" >
+            and trade_id = #{tradeId}
+        </if>
+    </select>
+</mapper>

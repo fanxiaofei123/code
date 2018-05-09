@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.enterprise.EnterpriseDao" >
+    <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="current_major_business" property="currentMajorBusiness" jdbcType="VARCHAR" />
+        <result column="employee_count" property="employeeCount" jdbcType="INTEGER" />
+        <result column="operate_address" property="operateAddress" jdbcType="VARCHAR" />
+        <result column="register_address" property="registerAddress" jdbcType="VARCHAR" />
+        <result column="enterprise_type" property="enterpriseType" jdbcType="VARCHAR" />
+        <result column="revenue" property="revenue" jdbcType="DOUBLE" />
+        <result column="tax" property="tax" jdbcType="DOUBLE" />
+        <result column="current_address" property="currentAddress" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+        <result column="data_type" property="dataType" jdbcType="INTEGER" />
+        <result column="is_modify" property="isModify" jdbcType="INTEGER" />
+        <result column="old_building" property="oldBuilding" jdbcType="INTEGER" />
+        <result column="old_major_business" property="oldMajorBusiness" jdbcType="VARCHAR" />
+        <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+        <result column="old_address" property="oldAddress" jdbcType="VARCHAR" />
+        <result column="version" property="version" jdbcType="INTEGER" />
+        <result column="is_useful" property="isUseful" jdbcType="BIT" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <trim prefix="where" prefixOverrides="and|or" >
+            <if test="name != null" >
+                and name = #{name}
+            </if>
+
+            <if test="currentMajorBusiness != null" >
+                and current_major_business = #{currentMajorBusiness}
+            </if>
+            <if test="employeeCount != null" >
+                and employee_count = #{employeeCount}
+            </if>
+            <if test="operateAddress != null" >
+                and operate_address = #{operateAddress}
+            </if>
+            <if test="registerAddress != null" >
+                and register_address = #{registerAddress}
+            </if>
+            <if test="enterpriseType != null" >
+                and enterprise_type = #{enterpriseType}
+            </if>
+
+            <if test="revenue != null" >
+                and revenue = #{revenue}
+            </if>
+            <if test="tax != null" >
+                and tax = #{tax}
+            </if>
+            <if test="currentAddress != null" >
+                and current_address = #{currentAddress}
+            </if>
+            <if test="createTime != null" >
+                and create_time = #{createTime}
+            </if>
+            <if test="linkman != null" >
+                and linkman = #{linkman}
+            </if>
+            <if test="phoneNumber != null" >
+                and phone_number = #{phoneNumber}
+            </if>
+            <if test="dataType != null" >
+                and data_type = #{dataType}
+            </if>
+            <if test="isModify != null" >
+                and is_modify = #{isModify}
+            </if>
+            <if test="oldBuilding != null" >
+                and old_building = #{oldBuilding}
+            </if>
+            <if test="oldMajorBusiness != null" >
+                and old_major_business = #{oldMajorBusiness}
+            </if>
+            <if test="introduce != null" >
+                and introduce = #{introduce}
+            </if>
+            <if test="oldAddress != null" >
+                and old_address = #{oldAddress}
+            </if>
+
+
+            <if test="version != null" >
+                and version = #{version}
+            </if>
+            <if test="isUseful != null" >
+                and is_useful = #{isUseful}
+            </if>
+        </trim>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, name,
+        employee_count AS employeeCount, operate_address AS operateAddress, register_address AS registerAddress,
+        enterprise_type AS enterpriseType,  revenue, tax, current_address AS currentAddress,
+        create_time AS createTime, linkman, phone_number AS phoneNumber, data_type AS dataType,
+        is_modify AS isModify, old_building AS oldBuilding, old_major_business AS oldMajorBusiness,
+        introduce, old_address AS oldAddress,
+        version, is_useful AS isUseful
+    </sql>
+    <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.enterprise.Enterprise" extends="BaseResultMap" />
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_enterprise
+        where id = #{id}
+    </select>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        update t_enterprise set is_deleted = 1
+        where id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into enterprise (name, category_id, current_major_business, employee_count, operate_address,
+        register_address, enterprise_type, building_id, revenue, tax, current_address,
+        create_time, linkman, phone_number, data_type, is_modify, old_building,
+        old_major_business, introduce, old_address, community_id,
+        version, is_useful)
+        values (#{name}, #{currentMajorBusiness}, #{employeeCount}, #{operateAddress},
+        #{registerAddress}, #{enterpriseType},  #{revenue}, #{tax}, #{currentAddress},
+        #{createTime}, #{linkman}, #{phoneNumber}, #{dataType}, #{isModify}, #{oldBuilding},
+        #{oldMajorBusiness}, #{introduce}, #{oldAddress},
+        #{version}, #{isUseful})
+    </insert>
+    <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into t_enterprise
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            id,
+            <if test="name != null" >
+                name,
+            </if>
+
+            <if test="currentMajorBusiness != null" >
+                current_major_business,
+            </if>
+            <if test="employeeCount != null" >
+                employee_count,
+            </if>
+            <if test="operateAddress != null" >
+                operate_address,
+            </if>
+            <if test="registerAddress != null" >
+                register_address,
+            </if>
+            <if test="enterpriseType != null" >
+                enterprise_type,
+            </if>
+
+            <if test="revenue != null" >
+                revenue,
+            </if>
+            <if test="tax != null" >
+                tax,
+            </if>
+            <if test="currentAddress != null" >
+                current_address,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="linkman != null" >
+                linkman,
+            </if>
+            <if test="phoneNumber != null" >
+                phone_number,
+            </if>
+            <if test="dataType != null" >
+                data_type,
+            </if>
+            <if test="isModify != null" >
+                is_modify,
+            </if>
+            <if test="oldBuilding != null" >
+                old_building,
+            </if>
+            <if test="oldMajorBusiness != null" >
+                old_major_business,
+            </if>
+            <if test="introduce != null" >
+                introduce,
+            </if>
+            <if test="oldAddress != null" >
+                old_address,
+            </if>
+
+
+            <if test="version != null" >
+                version,
+            </if>
+            <if test="isUseful != null" >
+                is_useful,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{id},
+            <if test="name != null" >
+                #{name},
+            </if>
+
+            <if test="currentMajorBusiness != null" >
+                #{currentMajorBusiness},
+            </if>
+            <if test="employeeCount != null" >
+                #{employeeCount},
+            </if>
+            <if test="operateAddress != null" >
+                #{operateAddress},
+            </if>
+            <if test="registerAddress != null" >
+                #{registerAddress},
+            </if>
+            <if test="enterpriseType != null" >
+                #{enterpriseType},
+            </if>
+
+            <if test="revenue != null" >
+                #{revenue},
+            </if>
+            <if test="tax != null" >
+                #{tax},
+            </if>
+            <if test="currentAddress != null" >
+                #{currentAddress},
+            </if>
+            <if test="createTime != null" >
+                #{createTime},
+            </if>
+            <if test="linkman != null" >
+                #{linkman},
+            </if>
+            <if test="phoneNumber != null" >
+                #{phoneNumber},
+            </if>
+            <if test="dataType != null" >
+                #{dataType},
+            </if>
+            <if test="isModify != null" >
+                #{isModify},
+            </if>
+            <if test="oldBuilding != null" >
+                #{oldBuilding},
+            </if>
+            <if test="oldMajorBusiness != null" >
+                #{oldMajorBusiness},
+            </if>
+            <if test="introduce != null" >
+                #{introduce},
+            </if>
+            <if test="oldAddress != null" >
+                #{oldAddress},
+            </if>
+
+
+            <if test="version != null" >
+                #{version},
+            </if>
+            <if test="isUseful != null" >
+                #{isUseful},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        update t_enterprise
+        <set >
+            <if test="name != null" >
+                name = #{name},
+            </if>
+
+            <if test="currentMajorBusiness != null" >
+                current_major_business = #{currentMajorBusiness},
+            </if>
+            <if test="employeeCount != null" >
+                employee_count = #{employeeCount},
+            </if>
+            <if test="operateAddress != null" >
+                operate_address = #{operateAddress},
+            </if>
+            <if test="registerAddress != null" >
+                register_address = #{registerAddress},
+            </if>
+            <if test="enterpriseType != null" >
+                enterprise_type = #{enterpriseType},
+            </if>
+
+            <if test="revenue != null" >
+                revenue = #{revenue},
+            </if>
+            <if test="tax != null" >
+                tax = #{tax},
+            </if>
+            <if test="currentAddress != null" >
+                current_address = #{currentAddress},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime},
+            </if>
+            <if test="linkman != null" >
+                linkman = #{linkman},
+            </if>
+            <if test="phoneNumber != null" >
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="dataType != null" >
+                data_type = #{dataType},
+            </if>
+            <if test="isModify != null" >
+                is_modify = #{isModify},
+            </if>
+            <if test="oldBuilding != null" >
+                old_building = #{oldBuilding},
+            </if>
+            <if test="oldMajorBusiness != null" >
+                old_major_business = #{oldMajorBusiness},
+            </if>
+            <if test="introduce != null" >
+                introduce = #{introduce},
+            </if>
+            <if test="oldAddress != null" >
+                old_address = #{oldAddress},
+            </if>
+
+
+            <if test="version != null" >
+                version = #{version},
+            </if>
+            <if test="isUseful != null" >
+                is_useful = #{isUseful},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        select
+        <include refid="Base_Column_List" />
+        from t_enterprise
+        <include refid="Example_Where_Clause" />
+        <include refid="common.Order_Type" />
+        <include refid="common.Mysql_Pagination_Limit" />
+    </select>
+    <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.enterprise.Enterprise" >
+        select count(id) from t_enterprise
+        <include refid="Example_Where_Clause" />
+    </select>
+    <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        from t_enterprise
+        <include refid="Example_Where_Clause" />
+        <include refid="common.Order_Type" />
+        <include refid="common.Mysql_Pagination_Limit" />
+    </select>
+    <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+        select count(id) from t_enterprise
+        <include refid="Example_Where_Clause" />
+    </select>
+    <insert id="batchInsert" parameterType="java.util.List" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" >
+            <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+        </selectKey>
+        insert into t_enterprise (name,
+        category_id, current_major_business, employee_count, operate_address,
+        register_address, enterprise_type, building_id, revenue,
+        tax, current_address, create_time, linkman, phone_number,
+        data_type, is_modify, old_building, old_major_business,
+        introduce, old_address, community_id, version,
+        is_useful)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.name},
+            #{item.currentMajorBusiness}, #{item.employeeCount}, #{item.operateAddress},
+            #{item.registerAddress}, #{item.enterpriseType},  #{item.revenue},
+            #{item.tax}, #{item.currentAddress}, #{item.createTime}, #{item.linkman}, #{item.phoneNumber},
+            #{item.dataType}, #{item.isModify}, #{item.oldBuilding}, #{item.oldMajorBusiness},
+            #{item.introduce}, #{item.oldAddress},   #{item.version},
+            #{item.isUseful})
+        </foreach>
+    </insert>
+    <update id="batchDelete" parameterType="java.util.List" >
+        UPDATE  t_enterprise set is_deleted = 1 WHERE id IN
+        <foreach collection="list" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select
+        name, register_address address
+        from t_enterprise_base
+
+    </select>
+    <select id="selectAllCount" resultType="java.lang.Long" >
+        select count(id) from t_enterprise
+        where is_deleted=0
+    </select>
+
+    <!-- 企业管理sql -->
+    <select id="queryByItem" resultType="com.youedata.cd.industries.pojo.enterprise.Enterprise" parameterType="java.util.Map">
+        SELECT eid as id,
+        ename as name,
+        address as address
+        FROM
+        t_full_info tfi
+        <where>
+            <if test="enterpriseRegistNumber!=null and enterpriseRegistNumber!=''">
+                AND tfi.ename LIKE '%${enterpriseRegistNumber}%'
+            </if>
+            <if test="enterpriseName!=null and enterpriseName!=''">
+                and tfi.ename LIKE '%${enterpriseName}%'
+            </if>
+            <if test="enterpriseAddress!=null and enterpriseAddress!=''">
+                AND tfi.address LIKE '%${enterpriseAddress}%'
+            </if>
+        </where>
+        <if test="dataInformation!=null and dataInformation!=''">
+            order by create_time desc limit 0,1
+        </if>
+    </select>
+
+    <!-- 根据企业ID删除对应楼宇 -->
+    <delete id="deleteByEnterpriseId" parameterType="long" >
+        delete from t_enterprise_base
+        where id = #{id}
+    </delete>
+
+</mapper>

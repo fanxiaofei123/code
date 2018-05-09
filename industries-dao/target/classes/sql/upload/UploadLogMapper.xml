@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.excel.UploadLogDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.log.UploadLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="success_count" property="successCount" jdbcType="INTEGER" />
+    <result column="fail_count" property="failCount" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="date != null and date != ''" >
+         and date = #{date}
+      </if>
+      <if test="successCount != null and successCount != ''" >
+         and success_count = #{successCount}
+      </if>
+      <if test="failCount != null and failCount!= ''" >
+         and fail_count = #{failCount}
+      </if>
+      <if test="type != null and type!=''" >
+         and type = #{type}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, date, success_count AS successCount, fail_count AS failCount, type
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.log.UploadLog" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log
+    where id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update t_upload_log set is_deleted = 1 
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.industries.pojo.log.UploadLog" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_upload_log (date, success_count, fail_count, type)
+    values (#{date}, #{successCount}, #{failCount}, #{type})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.log.UploadLog" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_upload_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="successCount != null" >
+        success_count,
+      </if>
+      <if test="failCount != null" >
+        fail_count,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="date != null" >
+        #{date},
+      </if>
+      <if test="successCount != null" >
+        #{successCount},
+      </if>
+      <if test="failCount != null" >
+        #{failCount},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.log.UploadLog" >
+    update t_upload_log
+    <set >
+      <if test="date != null" >
+        date = #{date},
+      </if>
+      <if test="successCount != null" >
+        success_count = #{successCount},
+      </if>
+      <if test="failCount != null" >
+        fail_count = #{failCount},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.log.UploadLog" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log
+	<include refid="Example_Where_Clause" />
+    order by date desc
+	<include refid="common.Order_Type" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.log.UploadLog" >
+    select count(id) from t_upload_log
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log
+	<include refid="Example_Where_Clause" />
+    order by date desc
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from t_upload_log
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_upload_log (date, 
+      success_count, fail_count, type)
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(#{item.date}, 
+      #{item.successCount}, #{item.failCount}, #{item.type})
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  t_upload_log set is_deleted = 1 WHERE id IN 
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from t_upload_log
+  </select>
+</mapper>

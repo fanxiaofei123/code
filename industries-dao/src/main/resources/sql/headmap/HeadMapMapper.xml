@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youedata.cd.industries.dao.heatmap.HeadMapDao">
+    <select id="searchIndex" resultMap="suReultMap">
+    SELECT
+    ty.`year` tyy,
+    tb.latitude tlatitude,
+    tb.longitude tlongitude,
+    ty.enterprise_count bcounts,
+    ts.`name` smame,
+    tca. NAME tcaname,
+    tyc.enterprise_count tyccount,
+    tyc.category_grade tycgrade,
+    tss.tssum scounts
+    FROM
+    t_year ty
+    LEFT JOIN t_building tb ON ty.building_id = tb.id
+    LEFT JOIN t_street ts ON tb.street_id = ts.id
+    LEFT JOIN (
+    SELECT
+        SUM(ty.enterprise_count) tssum,
+        ts.id sid,
+        ty. YEAR tyear
+    FROM
+        t_year ty,
+        t_building tb,
+        t_street ts
+    WHERE
+        ty.building_id = tb.id
+    AND tb.street_id = ts.id
+    GROUP BY
+        ts.id,
+        ty.`year`
+    ) tss ON ts.id = tss.sid
+    AND ty.`year` = tss.`tyear`
+    LEFT JOIN t_year_category tyc ON ty.`year` = tyc.`year`
+    LEFT JOIN t_category tca ON tyc.category_grade = tca.id
+    </select>
+    <resultMap id="suReultMap" type="com.youedata.cd.industries.pojo.heatmap.Version">
+        <id property="version" column="tyy"></id>
+        <collection property="buildingList" javaType="list"
+                    ofType="com.youedata.cd.industries.pojo.building.BuildingResult">
+            <result property="e" column="bcounts"></result>
+            <result property="lo" column="tlongitude"></result>
+            <result property="la" column="tlatitude"></result>
+        </collection>
+        <collection property="streetList" javaType="list" ofType="com.youedata.cd.industries.pojo.street.Street">
+            <result property="name" column="smame"></result>
+            <result property="enterpriseCounts" column="scounts"></result>
+        </collection>
+        <collection property="categorieList" javaType="list" ofType="com.youedata.cd.industries.pojo.category.Category">
+            <id property="grade" column="tycgrade"></id>
+            <result property="enterpriseCounts" column="tyccount"></result>
+            <result property="name" column="tcaname"></result>
+        </collection>
+    </resultMap>
+    <resultMap id="newReultMap" type="com.youedata.cd.industries.pojo.heatmap.Version">
+        <id property="version" column="tyy"></id>
+        <collection property="streetList" javaType="list" ofType="com.youedata.cd.industries.pojo.street.Street">
+            <result property="name" column="smame"></result>
+            <result property="enterpriseCounts" column="scounts"></result>
+        </collection>
+        <collection property="categorieList" javaType="list" ofType="com.youedata.cd.industries.pojo.category.Category">
+            <id property="grade" column="tycgrade"></id>
+            <result property="enterpriseCounts" column="tyccount"></result>
+            <result property="name" column="tcaname"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectSourceId" parameterType="java.util.Map" resultType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase">
+        SELECT
+            c.parent_id AS categoryId,
+            e.sourceLogId,
+            e.industryId,
+            e.tradeId,
+            e.id,
+            c.name AS categoryName
+        FROM
+            (
+                SELECT
+                    c.parent_id,
+                    e.source_log_id AS sourceLogId,
+                    e.industry_id AS industryId,
+                    e.trade_id AS tradeId,
+                    e.id
+                FROM
+                    t_enterprise_base e
+                LEFT JOIN t_category c ON e.category_id = c.id
+                WHERE
+                   is_deleted = 0 AND
+                   e.id IN
+                        (
+                            SELECT DISTINCT i.enterprise_id from index_data i
+                            WHERE
+                            i.start_time &gt;= #{timestampBegin}
+                            AND
+                            i.end_time  &lt;= #{timestampEnd}
+                        )
+            ) e
+        LEFT JOIN t_category c ON e.parent_id = c.id
+    </select>
+
+    <select id="selectEnterprisePoint" parameterType="list"
+            resultType="com.youedata.cd.industries.pojo.heatmap.Point">
+        SELECT longitude as lo ,latitude as la FROM t_enterprise_log WHERE
+        id IN
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <resultMap id="streetEnterprise" type="com.youedata.cd.industries.pojo.street.Street">
+        <result property="name" column="name"></result>
+        <result property="enterpriseCounts" column="num"></result>
+    </resultMap>
+    <resultMap id="categoryEnterprise" type="com.youedata.cd.industries.pojo.category.Category">
+        <result property="name" column="name"></result>
+        <result property="enterpriseCounts" column="num"></result>
+        <result property="id" column="id"></result>
+    </resultMap>
+
+    <select id="selectCountByStreet" resultMap="streetEnterprise" parameterType="list">
+        SELECT COUNT(1) AS num,
+        ts. NAME AS name
+        FROM
+        t_street ts
+        JOIN t_enterprise_log tel ON tel.street_id = ts.id
+        WHERE tel.id IN
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+        GROUP BY
+        ts. NAME
+    </select>
+
+    <select id="selectVersion" resultType="String">
+        SELECT DISTINCT  register_time FROM t_enterprise_base order by register_time desc limit 0,5
+    </select>
+
+    <select id="selectCountByCategory" resultMap="categoryEnterprise" parameterType="java.util.Map" >
+        SELECT count(*) as num , tc.name as name
+        FROM t_enterprise_base teb JOIN t_category  tc
+        ON teb.industry_id = tc.id JOIN t_enterprise_log tel
+        ON tel.id = teb.source_log_id
+        AND tel.id IS Not Null
+        AND teb.is_deleted = 0
+        AND teb.create_time  &lt;= #{timestampEnd}
+        AND teb.create_time  &gt;= #{timestampBegin}
+        GROUP BY tc.name
+        ORDER BY num
+    </select>
+
+
+</mapper>

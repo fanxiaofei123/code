@@ -1,0 +1,100 @@
+body,h4{
+	font-family: "Microsoft YaHei";
+}
+.ui-position-a{
+	position:absolute;
+}
+
+/*ģ̬��*/
+.modal-header{
+	padding-left: 30px;
+}
+.modal-body{
+	padding-left: 30px;
+}
+.modal-footer>.btn{
+	border:none;
+}
+.modal-dialog{
+	left:0;
+}
+.modal-width-800{
+	width: 800px;
+}
+.modal-width-700{
+	width: 700px;
+}
+.modal-width-500{
+	width: 500px;
+}
+.modal-width-400{
+	width: 400px;
+}
+/*������ʾ*/
+label.error {
+    margin-left: 5px;
+}
+
+/*loading*/
+.ui-widget-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+}
+#userInfoModify .icon-lock{
+	left: auto;
+	right: -30px;
+}
+#userInfoModify .form-control{
+	display: inline-block;
+	width: 280px;
+}
+
+.ui-dialog-titlebar{
+	display:none;
+}
+.ui-dialog, .ui-jqdialog{
+	border: 1px solid rgba(0,0,0,0.25);
+	color: orange;
+	background:rgba(0,0,0,0.25);
+}
+#youeLoadingStr{
+	font-size:16px
+}
+
+/*��ť*/
+.btn-search{
+	margin-top: -5px;
+}
+ .btn-light:hover{
+     background-color: #428bca!important;
+     color:#fff!important;
+ }
+ #updatedata label{
+ 	width:170px;
+ 	text-align:right;
+ }
+ #newsDiv label{
+ 	width:80px;
+ 	text-align:right;
+ }
+/* .control-label{
+	 width: 130px;
+ }*/
+ .input-icon-right{
+	 width: 240px;
+ }
+ .input-icon-right>i{
+
+ }
+.width-35 {
+	width: auto !important;
+}
+ .nvbar-style{
+	 width: 1920px;
+ }
+ /*选中样式*/
+.left_action{
+	border-right: solid #438EB9 medium!important;
+}

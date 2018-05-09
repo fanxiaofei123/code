@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.building.BuildingDao" >
+
+
+   <sql id="base_column_sql">
+       tfull.building_id bid,tfull.bname bname,tfull.blatitude blatitude,tfull.blongitude  blongitude
+      ,tfull.address baddress,tfull.ename ename,tfull.major_business major,tfull.employee_count ecount,
+      tca.name tradeName,tfull.phone_number phoneNumber,tfull.register_time registerTime,tfull.register_capital registerCapital,
+        tfull.open_flag openFlag
+   </sql>
+   <!-- 高级查询-->
+  <!--<select id="selectByQuery" resultMap="suResultMap"  parameterType="com.youedata.cd.industries.query.building.BuildingQuery">
+      SELECT
+      tfull.baddress baddress,tfull.building_id bid,tfull.bname bname,tfull.blatitude blatitude,tfull.blongitude  blongitude
+      ,SUM(tfull.employee_count) epsum,COUNT(DISTINCT tfull.eid) ecounts
+      FROM  t_full_info tfull
+      <include refid="conditionViewSql"></include>
+      GROUP BY tfull.building_id
+      ORDER BY  CONVERT( tfull.bname USING gbk ) COLLATE gbk_chinese_ci
+      <if test="start !=null  and limit!=null">
+          limit #{start},#{limit}
+      </if>
+  </select>-->
+    <select id="selectByQuery" resultMap="suResultMap"  parameterType="com.youedata.cd.industries.query.building.BuildingQuery">
+        SELECT DISTINCT tb.id bid,tb.`name` bname,tb.address baddress,tb.latitude blatitude,tb.longitude  blongitude,tsum.ecounts,tsum.epsum FROM t_building tb
+        LEFT JOIN t_enterprise_log tel
+        ON tb.id = tel.building_id
+        LEFT JOIN (
+        SELECT tb.id id,count(teb.id) ecounts,sum(teb.employee_count) epsum FROM t_building tb
+        LEFT JOIN t_enterprise_log tel
+        ON tb.id = tel.building_id
+        LEFT JOIN t_enterprise_base teb
+        ON tel.id = teb.source_log_id
+        WHERE teb.is_deleted = 0
+        GROUP BY tb.id
+        )tsum
+        ON tb.id = tsum.id
+        <include refid="buildingSql"></include>
+        ORDER BY  CONVERT( tb.name USING gbk ) COLLATE gbk_chinese_ci
+      <if test="start !=null  and limit!=null">
+         limit #{start},#{limit}
+      </if>
+  </select>
+
+
+
+    <sql id="buildingSql">
+        <where>
+
+            <if test="streetId !=null and streetId != '' ">
+                and tel.street_id =#{streetId}
+            </if>
+
+            <if test="communityId !=null and communityId != ''">
+                and tel.community_id =#{communityId}
+            </if>
+            <if test="buildingName !=null and buildingName !='' ">
+                and tb.name like CONCAT(CONCAT('%',#{buildingName}),'%' )
+            </if>
+
+            <if test="true">
+                AND  tb.is_deleted = 0
+            </if>
+        </where>
+    </sql>
+
+
+
+
+
+
+
+  <select id="selectByCount" resultType="int" parameterType="com.youedata.cd.industries.query.BaseQuery">
+      SELECT count(DISTINCT building_id) FROM
+      t_full_info tfull
+      <include refid="conditionViewSql"></include>
+  </select>
+
+<!-- 根据Id查询企业-->
+    <select id="searchByPrimaryKey" resultMap="suResultMap" parameterType="com.youedata.cd.industries.query.building.BuildingQuery">
+        SELECT
+          <include refid="base_column_sql"></include>,tfull.eid eid
+        FROM  t_full_info tfull
+        LEFT JOIN t_category tca
+        ON tfull.trade_id = tca.id
+        <include refid="conditionViewSql"></include>
+        <if test="start !=null  and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+
+  <resultMap id="suResultMap"  type="com.youedata.cd.industries.pojo.building.Building">
+      <id  property="id" column="bid"></id>
+      <result  property="name" column="bname"></result>
+      <result  property="address" column="baddress"></result>
+      <result  property="longitude" column="blongitude"></result>
+      <result  property="latitude" column="blatitude"></result>
+      <result  property="employeeCounts" column="epsum"></result>
+      <result  property="enterpriseCounts"  column="ecounts"></result>
+      <collection property="enterprises"   javaType="list"   ofType="com.youedata.cd.industries.pojo.enterprise.EnterpriseResult" >
+          <id property="id" column="eid"></id>
+
+          <result property="address" column="baddress"></result>
+          <result property="majorBusiness" column="major"></result>
+          <result property="employeeCount" column="ecount"></result>
+          <result property="name" column="ename"></result>
+          <result property="tradeName" column="tradeName"></result>
+          <result property="phoneNumber" column="phoneNumber"></result>
+          <result property="registerTime" column="registerTime"></result>
+          <result property="registerCapital" column="registerCapital"></result>
+          <result property="openFlag" column="openFlag"></result>
+      </collection>
+  </resultMap>
+
+    <sql id="conditionViewSql">
+    <where>
+        <if test="id !=null and id != '' ">
+            and tfull.building_id=#{id}
+        </if>
+        <if test="streetId !=null and streetId != '' ">
+            and tfull.b_street_id=#{streetId}
+        </if>
+        <if test="enterpriseName !=null and enterpriseName != '' ">
+            and tfull.ename like CONCAT(CONCAT('%',#{enterpriseName}),'%' )
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and tfull.community_id =#{communityId}
+        </if>
+        <if test="buildingName !=null and buildingName !='' ">
+            and tfull.bname like CONCAT(CONCAT('%',#{buildingName}),'%' )
+        </if>
+        <if test="industryId !=null and industryId != '' ">
+            and tfull.industry_id =#{industryId}
+        </if>
+        <if test="categoryId !=null and categoryId != '' ">
+            and tfull.category_id =#{categoryId}
+        </if>
+        <if test="tradeId !=null and tradeId != '' ">
+            and tfull.trade_id =#{tradeId}
+        </if>
+        <if test="true">
+            and  tfull.building_id IS NOT NULL AND  tfull.b_is_deleted = 0
+        </if>
+    </where>
+    </sql>
+
+    <select id="findByRegisterNumber" parameterType="String" resultType="com.youedata.cd.industries.dto.excel.EnterpriseDataUpdatesDto">
+         SELECT id,`name` as enterpriseName FROM t_enterprise_base WHERE register_number=#{registerNumber}
+    </select>
+
+    <select id="findByaddress" parameterType="String" resultType="com.youedata.cd.industries.dto.excel.BuildingDataUpdatesDto">
+          SELECT id,name as buildingName,address,community_id as communityId,street_id as streetId from t_building WHERE address=#{address} limit 0,1
+    </select>
+    <select id="selectAllCounts" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.query.building.BuildingQuery" >
+        SELECT count(id) FROM t_building
+        WHERE is_deleted = 0
+        <if test="streetId !=null and streetId != '' ">
+            and street_id=#{streetId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and community_id =#{communityId}
+        </if>
+        <if test="buildingName !=null and buildingName !='' ">
+            and name like CONCAT(CONCAT('%',#{buildingName}),'%' )
+        </if>
+
+    </select>
+
+</mapper>

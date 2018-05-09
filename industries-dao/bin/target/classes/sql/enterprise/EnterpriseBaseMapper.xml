@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.enterprise.EnterpriseBaseMapper" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="trade_id" property="tradeId" jdbcType="BIGINT" />
+    <result column="industry_id" property="industryId" jdbcType="BIGINT" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="register_address" property="registerAddress" jdbcType="VARCHAR" />
+    <result column="register_major_business" property="registerMajorBusiness" jdbcType="VARCHAR" />
+    <result column="register_capital" property="registerCapital" jdbcType="DOUBLE" />
+    <result column="employee_count" property="employeeCount" jdbcType="VARCHAR" />
+    <result column="operate_location" property="operateLocation" jdbcType="VARCHAR" />
+    <result column="register_location" property="registerLocation" jdbcType="VARCHAR" />
+    <result column="enterprise_type" property="enterpriseType" jdbcType="VARCHAR" />
+    <result column="revenue" property="revenue" jdbcType="DOUBLE" />
+    <result column="tax" property="tax" jdbcType="DOUBLE" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="open_flag" property="openFlag" jdbcType="VARCHAR" />
+    <result column="source_log_id" property="sourceLogId" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      teb.is_deleted=0 and tul.id=teb.upload_log_id
+      <if test="name != null" >
+         and teb.name like '%${name}%'
+      </if>
+      <if test="registerNumber != null" >
+        and teb.register_number like '%${registerNumber}%'
+      </if>
+      <if test="tradeId != null" >
+         and teb.trade_id = #{tradeId}
+      </if>
+      <if test="industryId != null" >
+         and teb.industry_id = #{industryId}
+      </if>
+      <if test="categoryId != null" >
+         and teb.category_id = #{categoryId}
+      </if>
+      <if test="registerAddress != null" >
+         and teb.register_address like '%${registerAddress}%'
+      </if>
+      <if test="registerMajorBusiness != null" >
+         and teb.register_major_business = #{registerMajorBusiness}
+      </if>
+      <if test="registerCapital != null" >
+         and teb.register_capital = #{registerCapital}
+      </if>
+      <if test="employeeCount != null" >
+         and teb.employee_count = #{employeeCount}
+      </if>
+      <if test="operateLocation != null" >
+         and teb.operate_location = #{operateLocation}
+      </if>
+      <if test="registerLocation != null" >
+         and teb.register_location = #{registerLocation}
+      </if>
+      <if test="enterpriseType != null" >
+         and teb.enterprise_type = #{enterpriseType}
+      </if>
+      <if test="revenue != null" >
+         and teb.revenue = #{revenue}
+      </if>
+      <if test="tax != null" >
+         and teb.tax = #{tax}
+      </if>
+      <if test="registerTime != null" >
+         and teb.register_time = #{registerTime}
+      </if>
+      <if test="createTime != null" >
+         and teb.create_time = #{createTime}
+      </if>
+      <if test="linkman != null" >
+         and teb.linkman = #{linkman}
+      </if>
+      <if test="phoneNumber != null" >
+         and teb.phone_number = #{phoneNumber}
+      </if>
+      <if test="introduce != null" >
+         and teb.introduce = #{introduce}
+      </if>
+      <if test="openFlag != null" >
+         and teb.open_flag = #{openFlag}
+      </if>
+      <if test="sourceLogId != null" >
+         and teb.source_log_id = #{sourceLogId}
+      </if>
+      <if test="isDeleted != null" >
+         and teb.is_deleted = #{isDeleted}
+      </if>
+      <if test="uploadDate == ''" >
+        and tul.date = #{uploadDate}
+      </if>
+      <if test="uploadDate == 1" >
+        and teb.upload_log_id = (
+        select id from t_upload_log
+        where type = 1  and success_count!=0
+        ORDER BY date desc limit 0,1
+        )
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+   teb.id AS id,
+   tb.id as buildingId,
+   tul.date as uploadDate,
+   tul.type as type,
+   teb.register_number AS registerNumber,
+   teb.industry_code AS industryCode,
+teb.name AS name,
+teb.register_address AS registerAddress,
+tel.address AS address,
+teb.industry_id AS industryId,
+teb.trade_id AS tradeId,
+teb.category_id AS categoryId,
+tel.street_id AS streetId,
+tel.community_id AS communityId,
+ts.name AS streetName,
+tc.name AS communityName,
+teb.register_capital AS registerCapital,
+teb.phone_number AS phoneNumber,
+teb.register_time AS registerTime,
+teb.open_flag AS openFlag,
+teb.employee_count AS employeeCount,
+tel.address AS address,
+tel.major_business AS majorBusiness,
+teb.is_deleted AS isDeleted
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" parameterType="java.lang.Long" >
+    /*根据ID查询*/
+    select
+     teb.id AS id,
+   tb.id as buildingId,
+   teb.register_number AS registerNumber,
+   teb.industry_code AS industryCode,
+teb.name AS name,
+teb.register_address AS registerAddress,
+tel.address AS address,
+teb.industry_id AS industryId,
+teb.trade_id AS tradeId,
+teb.category_id AS categoryId,
+tel.street_id AS streetId,
+tel.community_id AS communityId,
+ts.name AS streetName,
+tc.name AS communityName,
+teb.register_capital AS registerCapital,
+teb.phone_number AS phoneNumber,
+teb.register_time AS registerTime,
+teb.source_log_id AS sourceLogId,
+teb.open_flag AS openFlag,
+teb.employee_count AS employeeCount,
+tel.address AS address,
+tel.major_business AS majorBusiness,
+teb.is_deleted AS isDeleted
+    from t_enterprise_base teb
+    left join t_enterprise_log  tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    where teb.is_deleted=0 and teb.id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update t_enterprise_base set is_deleted = 1 
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_enterprise_base (name, trade_id, industry_id, category_id, register_address, register_major_business, 
+      register_capital, employee_count, operate_location, register_location, 
+      enterprise_type, revenue, tax, register_time, create_time, linkman, 
+      phone_number, introduce, open_flag, source_log_id, is_deleted)
+    values (#{name}, #{tradeId}, #{industryId}, #{categoryId}, #{registerAddress}, #{registerMajorBusiness}, 
+      #{registerCapital}, #{employeeCount}, #{operateLocation}, #{registerLocation}, 
+      #{enterpriseType}, #{revenue}, #{tax}, #{registerTime}, #{createTime}, #{linkman}, 
+      #{phoneNumber}, #{introduce}, #{openFlag}, #{sourceLogId}, #{isDeleted})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_enterprise_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="industryId != null" >
+        industry_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="registerAddress != null" >
+        register_address,
+      </if>
+      <if test="registerMajorBusiness != null" >
+        register_major_business,
+      </if>
+      <if test="registerCapital != null" >
+        register_capital,
+      </if>
+      <if test="employeeCount != null" >
+        employee_count,
+      </if>
+      <if test="operateLocation != null" >
+        operate_location,
+      </if>
+      <if test="registerLocation != null" >
+        register_location,
+      </if>
+      <if test="enterpriseType != null" >
+        enterprise_type,
+      </if>
+      <if test="revenue != null" >
+        revenue,
+      </if>
+      <if test="tax != null" >
+        tax,
+      </if>
+      <if test="registerTime != null" >
+        register_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="linkman != null" >
+        linkman,
+      </if>
+      <if test="phoneNumber != null" >
+        phone_number,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="openFlag != null" >
+        open_flag,
+      </if>
+      <if test="sourceLogId != null" >
+        source_log_id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId},
+      </if>
+      <if test="industryId != null" >
+        #{industryId},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId},
+      </if>
+      <if test="registerAddress != null" >
+        #{registerAddress},
+      </if>
+      <if test="registerMajorBusiness != null" >
+        #{registerMajorBusiness},
+      </if>
+      <if test="registerCapital != null" >
+        #{registerCapital},
+      </if>
+      <if test="employeeCount != null" >
+        #{employeeCount},
+      </if>
+      <if test="operateLocation != null" >
+        #{operateLocation},
+      </if>
+      <if test="registerLocation != null" >
+        #{registerLocation},
+      </if>
+      <if test="enterpriseType != null" >
+        #{enterpriseType},
+      </if>
+      <if test="revenue != null" >
+        #{revenue},
+      </if>
+      <if test="tax != null" >
+        #{tax},
+      </if>
+      <if test="registerTime != null" >
+        #{registerTime},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="linkman != null" >
+        #{linkman},
+      </if>
+      <if test="phoneNumber != null" >
+        #{phoneNumber},
+      </if>
+      <if test="introduce != null" >
+        #{introduce},
+      </if>
+      <if test="openFlag != null" >
+        #{openFlag},
+      </if>
+      <if test="sourceLogId != null" >
+        #{sourceLogId},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    update t_enterprise_base
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId},
+      </if>
+      <if test="industryId != null" >
+        industry_id = #{industryId},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId},
+      </if>
+      <if test="registerAddress != null" >
+        register_address = #{registerAddress},
+      </if>
+      <if test="registerMajorBusiness != null" >
+        register_major_business = #{registerMajorBusiness},
+      </if>
+      <if test="registerCapital != null" >
+        register_capital = #{registerCapital},
+      </if>
+      <if test="employeeCount != null" >
+        employee_count = #{employeeCount},
+      </if>
+      <if test="operateLocation != null" >
+        operate_location = #{operateLocation},
+      </if>
+      <if test="registerLocation != null" >
+        register_location = #{registerLocation},
+      </if>
+      <if test="enterpriseType != null" >
+        enterprise_type = #{enterpriseType},
+      </if>
+      <if test="revenue != null" >
+        revenue = #{revenue},
+      </if>
+      <if test="tax != null" >
+        tax = #{tax},
+      </if>
+      <if test="registerTime != null" >
+        register_time = #{registerTime},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="linkman != null" >
+        linkman = #{linkman},
+      </if>
+      <if test="phoneNumber != null" >
+        phone_number = #{phoneNumber},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce},
+      </if>
+      <if test="openFlag != null" >
+        open_flag = #{openFlag},
+      </if>
+      <if test="sourceLogId != null" >
+        source_log_id = #{sourceLogId},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    <include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" >
+    select count(teb.id) from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    <include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    <include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(teb.id) from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into t_enterprise_base (name, 
+      trade_id, industry_id, category_id, register_address, 
+      register_major_business, register_capital, employee_count, 
+      operate_location, register_location, enterprise_type, revenue, 
+      tax, register_time, create_time, linkman, phone_number, 
+      introduce, open_flag, source_log_id, is_deleted)
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(#{item.name}, 
+      #{item.tradeId}, #{item.industryId}, #{item.categoryId}, #{item.registerAddress}, 
+      #{item.registerMajorBusiness}, #{item.registerCapital}, #{item.employeeCount}, 
+      #{item.operateLocation}, #{item.registerLocation}, #{item.enterpriseType}, #{item.revenue}, 
+      #{item.tax}, #{item.registerTime}, #{item.createTime}, #{item.linkman}, #{item.phoneNumber}, 
+      #{item.introduce}, #{item.openFlag}, #{item.sourceLogId}, #{item.isDeleted})
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  t_enterprise_base set is_deleted = 1 WHERE id IN 
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    where teb.is_deleted=0
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(teb.id) from t_upload_log tul,t_enterprise_base teb
+    left join t_enterprise_log tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    where teb.is_deleted=0
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" >
+    select register_address,register_major_business 
+    from t_enterprise_base 
+    where id=#{id}
+  </select>
+  <select id="selectNameAndId" resultType="com.youedata.cd.industries.pojo.enterprise.EnterprisebaseResult" >
+    select id,name
+    from t_enterprise_base
+  </select>
+
+  <!-- 通过企业注册号查询企业 -->
+  <select id="selectByRegisterNumber" resultType="com.youedata.cd.industries.pojo.enterprise.EnterpriseBase" parameterType="java.lang.String" >
+    select
+   teb.id AS id,
+   tb.id as buildingId,
+   teb.register_number AS registerNumber,
+   teb.industry_code AS industryCode,
+teb.name AS name,
+teb.register_address AS registerAddress,
+tel.address AS address,
+teb.industry_id AS industryId,
+teb.trade_id AS tradeId,
+teb.category_id AS categoryId,
+tel.street_id AS streetId,
+tel.community_id AS communityId,
+ts.name AS streetName,
+tc.name AS communityName,
+teb.register_capital AS registerCapital,
+teb.phone_number AS phoneNumber,
+teb.register_time AS registerTime,
+teb.open_flag AS openFlag,
+teb.employee_count AS employeeCount,
+tel.address AS address,
+tel.major_business AS majorBusiness,
+teb.is_deleted AS isDeleted
+    from t_enterprise_base teb
+    left join t_enterprise_log  tel on teb.source_log_id = tel.id
+    left join t_building tb on tel.building_id = tb.id
+    left join t_street ts on tel.street_id = ts.id
+    left join t_community tc on tel.community_id = tc.id
+    where teb.is_deleted=0 and teb.register_number = #{registerNumber}
+  </select>
+
+</mapper>

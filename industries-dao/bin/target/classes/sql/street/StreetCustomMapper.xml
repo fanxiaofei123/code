@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.street.StreetDao" >
+
+
+  <!-- 根据Id查询社区-->
+  <select id="searchByPrimaryKey" resultMap="suResultMap" parameterType="com.youedata.cd.industries.query.BaseQuery">
+    SELECT  ts.id id,tc.id cid,tc.name cname
+    FROM t_street ts
+    LEFT JOIN t_community tc
+    ON ts.id =tc.street_id
+    <include refid="conditionSql"></include>
+  </select>
+
+  <select id="selectByCount" resultType="int" parameterType="com.youedata.cd.industries.query.BaseQuery">
+    SELECT COUNT(*) FROM t_street
+  </select>
+
+  <resultMap id="suResultMap" type="com.youedata.cd.industries.pojo.street.Street">
+    <id  property="id" column="id"></id>
+    <collection property="coummunitys"  javaType="list" ofType="com.youedata.cd.industries.pojo.community.Community" >
+      <id  property="id" column="cid"></id>
+      <result property="name" column="cname"></result>
+    </collection>
+  </resultMap>
+
+
+
+  <sql id="conditionSql">
+    <where>
+      <if test="id !=null and id!=''">
+        and ts.id= #{id}
+      </if>
+    </where>
+  </sql>
+
+
+</mapper>

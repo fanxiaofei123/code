@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.md.PatentsDao">
+    <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.md.Patents">
+        <result column="patents_id" property="patentsId" jdbcType="INTEGER"/>
+        <result column="right_holder" property="rightHolder" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="filing_date" property="filingDate" jdbcType="VARCHAR"/>
+        <result column="announcement_date" property="announcementDate" jdbcType="VARCHAR"/>
+        <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
+        <result column="applicant" property="applicant" jdbcType="VARCHAR"/>
+        <result column="inventor" property="inventor" jdbcType="VARCHAR"/>
+        <result column="application_number" property="applicationNumber" jdbcType="VARCHAR"/>
+        <result column="announcement_number" property="announcementNumber" jdbcType="VARCHAR"/>
+        <result column="holder" property="holder" jdbcType="VARCHAR"/>
+        <result column="xml_type" property="xmlType" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    patents_id, right_holder, title, address, filing_date,
+    announcement_date, patent_type, applicant, inventor,
+    application_number, announcement_number,
+    holder, xml_type
+  </sql>
+
+    <select id="queryAll" resultType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Patents
+    </select>
+  <select id="selectByMapPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Patents
+    where patents_id = #{id} and ipc like concat(#{ipcf},'%')
+    <include refid="common.Order_Type" />
+    <include refid="common.Mysql_Pagination_Limit" />
+  </select>
+
+  <select id="query" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from Patents
+    where patents_id = #{id} and title = #{title}
+  </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+#oldPassword-error,#userPasswordConfirm-error,#userPasswordNew-error {
+    position: absolute;
+    top: 2px;
+    left: 300px;
+    width: 100%;
+}
+#passwdTips {
+    position: absolute;
+    /* top: 2px; */
+    left: 450px;
+}
+.passwdTips{
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 8px;
+    border: 1px solid grey;
+    margin-right: 5px;
+}
+
+.ud-gp{
+    height: 50px;
+}

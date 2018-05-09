@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.index.IndexDefinitionDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.index.pojo.IndexDefinition" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="BIGINT" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="data_source" property="dataSource" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="id != null" >
+        and id = #{id}
+      </if>
+      <if test="name != null" >
+         and name = #{name}
+      </if>
+      <if test="pid != null" >
+         and pid = #{pid}
+      </if>
+      <if test="unit != null" >
+         and unit = #{unit}
+      </if>
+      <if test="level != null" >
+         and level = #{level}
+      </if>
+      <if test="dataSource != null" >
+         and data_source = #{dataSource}
+      </if>
+      <if test="description != null" >
+         and description = #{description}
+      </if>
+      <if test="isDeleted != null" >
+         and is_deleted = #{isDeleted}
+      </if>
+      <if test="createdTime != null" >
+         and created_time = #{createdTime}
+      </if>
+      <if test="updateTime != null" >
+         and update_time = #{updateTime}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, pid AS "parent.id", unit, level, data_source AS dataSource, description, is_deleted AS isDeleted, 
+    created_time AS createdTime, update_time AS updateTime
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.index.pojo.IndexDefinition" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_definition
+    where is_deleted = 0 and id = #{id}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update index_definition set is_deleted = 1 
+    where id = #{id}
+  </update>
+  <insert id="insert" parameterType="com.youedata.cd.index.pojo.IndexDefinition" >
+    <selectKey resultType="java.lang.String" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_definition (id,name, pid, unit, level, data_source, description, is_deleted, 
+      created_time, update_time)
+    values (GUID(), #{name}, #{parent.id}, #{unit}, #{level}, #{dataSource}, #{description}, #{isDeleted}, 
+      #{createdTime}, #{updateTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.index.pojo.IndexDefinition" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_definition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parent.id != null" >
+        parent.id,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="dataSource != null" >
+        data_source,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+       GUID(),
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="unit != null" >
+        #{unit},
+      </if>
+      <if test="level != null" >
+        #{level},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.index.pojo.IndexDefinition" >
+    update index_definition
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="parent.id != null" >
+        pid = #{parent.id},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit},
+      </if>
+      <if test="level != null" >
+        level = #{level},
+      </if>
+      <if test="dataSource != null" >
+        data_source = #{dataSource},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.index.pojo.IndexDefinition" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_definition
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.index.pojo.IndexDefinition" >
+    select count(id) from index_definition
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_definition
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from index_definition
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" >
+       <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+    </selectKey>
+    insert into index_definition (id, name, 
+      pid, unit, level, data_source, description, 
+      is_deleted, created_time, update_time)
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(GUID(), #{item.name}, 
+      #{item.pid}, #{item.unit}, #{item.level}, #{item.dataSource}, #{item.description}, 
+      #{item.isDeleted}, #{item.createdTime}, #{item.updateTime})
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  index_definition set is_deleted = 1 WHERE id IN 
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from index_definition
+	where is_deleted = 0
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from index_definition
+	 where is_deleted=0
+  </select>
+
+  <!--通过指标定义对象封装值进行过滤查询-->
+  <select id="selectByMap" resultType="com.youedata.cd.index.pojo.IndexDefinition" parameterType="com.youedata.cd.index.pojo.IndexDefinition"  >
+    select id, `name`, pid, unit, `level`, data_source AS dataSource, description, is_deleted AS isDeleted, created_time AS  createdTime,
+    update_time AS  updateTime from index_definition
+    <include refid="Example_Where_Clause"></include>
+  </select>
+</mapper>

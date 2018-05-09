@@ -1,0 +1,388 @@
+.g-hd {
+    background-color: #FFFFFF;
+    border-bottom: 9px solid #3287AC;
+}
+
+.u-item {
+    background-color: white;
+}
+
+#selectEnOrBd {
+    background-color: #3287AC;
+}
+
+.g-ft {
+    background-color: white;
+
+}
+
+.g-ft > p {
+    color: black;
+}
+
+.g-sd {
+    border: 0;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    background-color: #035F86;
+}
+
+.g-hd .m-nav li.active > a, .g-hd .m-nav li a:hover {
+    color: white;
+    background-color: #3287AC;
+}
+
+.g-hd .m-nav li > a, .g-hd .m-nav li a {
+    color: black;
+    background-color: white;
+}
+
+.input1 {
+    border: none;
+    padding: 10px;
+    margin-top: 8%;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    width: 80%;
+    text-align: left;
+}
+
+.g-sdc .u-item, .g-sdc .u-sch {
+    border: 0
+}
+
+.g-sdc .u-list, .g-sdc .u-ct {
+    top: 342px;
+    width: 355px;
+    height: 54%;
+}
+
+.g-sd {
+    text-align: left;
+}
+
+.g-sdc .u-rst {
+    color: #4F9DA1;
+}
+
+.u-uu {
+    color: #4F9DA1;
+}
+
+.g-sdc-left {
+    text-align: left;
+    padding-left: 10%;
+    background-color: #055A7F;
+    color: #59A9A8;
+    border-left: solid #EEFCBC medium;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.g-sdc-bottom{
+    border-bottom: 0;
+}
+
+
+.fangyou-switch {
+    cursor: pointer;
+    float: left;
+    position: relative;
+    display: block;
+    width: 30px;
+    height: 12px;
+    background-clip: padding-box;
+    border-radius: 20px;
+
+    background-color: #B2DABF;
+}
+
+.fangyou-switch-handle {
+    position: absolute;
+    top: -3px;
+    z-index: 1;
+    width: 18px;
+    height: 18px;
+    background-clip: padding-box;
+    border-radius: 16px;
+    background-color: #70C1B3;
+
+    left: 12px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: #6FC1B3;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    background-color: #E0E0E0;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    background-color: #6FC1B3;
+}
+
+.fangyou-list {
+    cursor: pointer;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 40%;
+    line-height: 25px;
+    font-size: small;
+}
+
+.fangyou-list:hover {
+    color: #14B8FF;
+}
+
+.fangyou-button > a {
+    font-size: small;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    padding: 1px 7px 0 7px;
+    border-bottom: solid white medium;
+}
+
+.fangyou-button > a:hover {
+    color: #3287AC;
+    padding: 1px 7px 0 7px;
+    border-bottom: solid #3287AC medium;
+}
+
+.fangyou-button-action {
+    color: #3287AC;
+    padding: 1px 7px 0 7px;
+    border-bottom: solid #3287AC medium;
+}
+
+.fangyou-button {
+    margin-top: 5%;
+}
+
+.my-list {
+    margin-left: 10%;
+    background-color: white;
+    color: #035F86;
+    padding: 0;
+    height: 50%
+}
+
+.my-list1 {
+    width: 50%;
+    float: left;
+    cursor: pointer;
+}
+
+.my-list1-action {
+    background-color: #3287AC;
+    color: white
+}
+
+.my-list-p {
+    padding: 1px
+}
+
+.my-list-header {
+    height: 10%;
+    text-align: center
+}
+
+.search-result {
+    text-align: left;
+    padding-left: 10%;
+    padding-top: 6%;
+    margin-top: 6%;
+    padding-bottom: 6%;
+    background-color: #055A7F;
+    color: #59A9A8;
+    border-left: solid #EEFCBC medium
+}
+
+.my-list-result {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 100%;
+    height: 83%
+}
+
+.my-search-button {
+    cursor: pointer;
+    position: absolute;
+    left: 310px;
+    top: 35px
+}
+
+.my-list-id {
+    width: 20%;
+    float: left;
+}
+
+.my-list-content {
+    width: 80%;
+    float: left;
+}
+.g-sdc .g-sdc-left{
+    /*margin-top: 0;*/
+    padding-top: 5%;
+    padding-bottom: 5%;
+    height: 10%;
+}
+
+.g-sdc .u-item, .g-sdc .u-sch {
+    border-color: white;
+}
+.u-tab{
+    width: 50%;
+}
+.g-sdc .u-tab{
+    left: 0;
+    right: 0;
+}
+.g-sdc .u-tab {
+    width: 50%;
+    float: left;
+    padding-left: 0;
+    padding-right: 0;
+}
+.u-tab{
+    width: 50%;
+    float: left;
+    padding-left: 0;
+    padding-right: 0;
+    color: white;
+}
+.my-u-tab{
+    width: 100%;
+    background-color: #3287AC!important;
+}
+
+
+
+.my-u-tab .active{
+    background-color: white;
+    color: #035F86!important;
+}
+.g-sdc>.u-tabs>.u-tab:hover, .g-sdc>.u-tabs>.u-tab.active{
+    color: #035F86;
+}
+
+.g-sdc .u-tab{
+    color: white;
+}
+.u-tabs .u-tab:hover{
+    color: white;
+}
+.u-list .u-item:hover{
+    background-color: white;
+    color: #2C9ACD;
+}
+
+.g-sdc .u-list{
+    padding-right: 0;
+}
+
+.u-circle span{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: white;
+}
+
+.u-circle{
+    text-align: center;
+    color: white;
+    margin: 0;
+    padding: 10px;
+}
+
+.g-sdc .u-ct{
+    background-color: white;
+    margin-left: 12px;
+    width: 343px;
+}
+
+.u-sch-group{
+    margin-left: 20px;
+}
+
+.u-sch-item>span{
+    width: 141px;
+    margin-bottom: 20px;
+}
+
+.u-btn-c4{
+    background-color: white;
+    color: #035F86;
+    text-overflow: clip;
+    overflow: hidden;
+    width: 30px;
+}
+
+.u-sch-item>.u-sch-item-sel>a{
+    background-color: #1B6D92;
+    color: #16AAEA;
+}
+
+.u-sch-item>.u-sch-item-sel{
+    background-color: #1B6D92;
+}
+
+.u-btn-c4:hover{
+    background-color: white;
+    color: #035F86;;
+}
+
+#community_div{
+    padding: 0;
+}
+.pagination{
+    position: fixed;
+    bottom: 50px;
+    width: 347px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    background-color: #035f86;
+}
+.pagination>a{
+    /*padding: 5px 8px 5px 8px;*/
+    background-color: white;
+    color: #20839E;
+    border:1px white solid;
+}
+.pagination>.next,.pagination>.prev{
+    /*padding: 5px 8px 5px 8px;*/
+    background-color: #20839E;
+    color: white;
+    border:1px #20839E solid;
+}
+.pagination>.current{
+    /*padding: 5px 8px 5px 8px;*/
+    background-color: white;
+    color: #70C0B3;
+    border:1px white solid;
+    border-bottom: 3px #70C0B3 solid;
+}
+.u-sch-item>.u-sch-item-2{
+    left: 0px;
+}
+.u-sch-item>.u-sch-item-4{
+    left: 0px;
+}
+
+#selectEnOrBd>div{
+    background-color: #3287AC!important;
+}
+#selectEnOrBd>.active{
+    background-color: white!important;
+}

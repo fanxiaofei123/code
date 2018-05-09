@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.md.DistributionDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.md.Distribution" >
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="authorize" property="authorize" jdbcType="INTEGER" />
+    <result column="ipcf" property="ipcf" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+  </resultMap>
+
+    <sql id="Base_Column_List">
+    year, authorize, ipcf, amount
+  </sql>
+
+    <select id="queryAll" resultType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Distribution
+    </select>
+
+  <!--分布SQL-->
+  <select id="industry" parameterType="java.lang.Integer"  resultType="java.util.HashMap">
+    select
+    min(year) minYear,max(year) maxYear,count(year) countYear
+    from Distribution
+    <where>
+      <if test="fyear != null">
+        year >= #{fyear}
+      </if>
+      <if test="pyear != null">
+        and #{pyear} >= year
+      </if>
+    </where>
+  </select>
+
+  <select id="industryAll" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+    select
+    ipcf,sum(amount) sumAmount
+    from Distribution
+    <where>
+      <if test="fyear != null">
+        year >= #{fyear}
+      </if>
+      <if test="pyear != null">
+        and #{pyear} >= year
+      </if>
+    </where>
+    group by ipcf
+    order by ipcf
+  </select>
+
+    <!--统计SQL-->
+    <select id="apply" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        select year,amount from Distribution where authorize=#{authorize}
+        group by year
+        order by year
+    </select>
+
+    <select id="authorise" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        select year,amount from Distribution where authorize=#{authorize}
+        group by year
+        order by year
+    </select>
+
+    <select id="getPatensVitality" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        SELECT year,authorize,ipcf,SUM(amount) amount from Distribution
+        <if test="_parameter!=null">
+            WHERE authorize=#{authorize}
+        </if>
+        GROUP BY year,ipcf ORDER BY year
+    </select>
+
+    <select id="getPatensTime" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        SELECT t.ipcf name,t.consume value from Types t
+        <if test="_parameter!=null">
+            WHERE patent_type=#{patentType}
+        </if>
+        order by t.consume asc
+    </select>
+</mapper>

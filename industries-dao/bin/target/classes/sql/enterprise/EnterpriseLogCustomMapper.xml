@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.enterprise.EnterpriseLogMapper" >
+
+    <!--通过变更企业id查询歷史详情-->
+    <select id="selectChangesEnterpriseById"  resultType="com.youedata.cd.industries.pojo.enterprise.EnterpriseLog" parameterType="com.youedata.cd.industries.query.enterprise.EnterpriseQuery" >
+      SELECT tel.major_business majorBusiness,tel.address address,
+      tb.latitude latitude,tb.longitude longitude,tel.version_id versionId,
+      tel.address_modify_flag addressModifyFlag,tel.major_business_modify_flag majorBusinessModifyFlag
+      FROM t_enterprise_log tel
+      LEFT JOIN t_building tb
+      ON tel.building_id = tb.id
+      <include refid="conditionSql"></include>
+      AND tel.address_modify_flag =1
+      ORDER  BY tel.version_id
+      <if test="start !=null  and limit!=null">
+        limit #{start},#{limit}
+      </if>
+    </select>
+  <sql id="conditionSql">
+    <where>
+      <if test="id !=null and id != '' ">
+        and tel.enterprise_id=#{id}
+      </if>
+      <if test="addressChange !=null and addressChange != '' ">
+        and tel.address_modify_flag =#{addressChange}
+      </if>
+      <if test="majorBussinessChange !=null and majorBussinessChange != '' ">
+        and tel.major_business_modify_flag =#{majorBussinessChange}
+      </if>
+        <if test="sourceLogId !=null and sourceLogId != '' ">
+            and tel.id != #{sourceLogId}
+        </if>
+    </where>
+  </sql>
+  <update id="updateBuildingId" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseLog">
+            UPDATE t_enterprise_log
+        SET street_id = #{streetId},
+         building_id = #{buildingId},
+         community_id=#{communityId}
+            WHERE
+            id = (
+                SELECT
+                    source_log_id
+                FROM
+                    t_enterprise_base
+                WHERE
+                    register_number = #{registerNumber}
+            )
+
+  </update>
+
+  <update id="updateBaseSourceId" parameterType="com.youedata.cd.industries.pojo.enterprise.EnterpriseLog">
+    update t_enterprise_base set source_log_id = #{id} WHERE register_number=#{registerNumber}
+  </update>
+
+
+  <select id="getLogId" parameterType="map" resultType="String">
+    SELECT id FROM t_enterprise_log
+    <include refid="logSql"></include>
+    ORDER BY  change_date limit 0,1
+  </select>
+    <select id="findEnIdByEnName" parameterType="string" resultType="long">
+    SELECT id FROM t_enterprise_base WHERE  name = #{name}
+     limit 0,1
+  </select>
+
+    <sql id="logSql">
+        <where>
+            <if test="enterpriseId !=null and enterpriseId != '' ">
+                and enterprise_id = #{enterpriseId}
+            </if>
+            <if test="address !=null and address != '' ">
+                and address = #{address}
+            </if>
+            <if test="isOldAddress !=null and isOldAddress != '' ">
+                and is_old_address =#{isOldAddress}
+            </if>
+        </where>
+    </sql>
+
+
+
+  <select id="selectEnterpriseLogId" parameterType="String" resultType="String">
+    SELECT
+		id
+	FROM
+		t_enterprise_log
+	WHERE
+		enterprise_id = (
+			SELECT
+				id
+			FROM
+				t_enterprise_base
+			WHERE
+				register_number =#{registerNumber}
+		)
+	ORDER BY
+		change_date DESC
+	LIMIT 0,
+	1
+  </select>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.community.CommunityDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.community.Community" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="street_id" property="streetId" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="name != null" >
+         and name = #{name}
+      </if>
+      <if test="streetId != null" >
+         and street_id = #{streetId}
+      </if>
+      <if test="longitude != null" >
+         and longitude = #{longitude}
+      </if>
+      <if test="latitude != null" >
+         and latitude = #{latitude}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, street_id AS streetId,longitude,latitude
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.community.Community" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_community
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+     DELETE FROM  t_community
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.youedata.cd.industries.pojo.community.Community" >
+    insert into t_community (name, street_id,longitude,latitude)
+    values (#{name}, #{streetId},#{longitude},#{latitude})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.community.Community" >
+    insert into t_community
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="streetId != null" >
+        street_id,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="streetId != null" >
+        #{streetId},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.community.Community" >
+    update t_community
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="streetId != null" >
+        street_id = #{streetId},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.community.Community" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_community
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.community.Community" >
+    select count(id) from t_community
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_community
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from t_community
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into t_community (name,
+      street_id,longitude,latitude)
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(#{item.name}, 
+      #{item.streetId},#{item.longitude},#{item.latitude})
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_community
+
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from t_community
+
+  </select>
+</mapper>

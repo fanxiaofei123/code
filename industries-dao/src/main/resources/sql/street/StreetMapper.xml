@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youedata.cd.industries.dao.street.StreetDao" >
+  <resultMap id="BaseResultMap" type="com.youedata.cd.industries.pojo.street.Street" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="tsesum" property="enterpriseCounts" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="name != null" >
+         and name = #{name}
+      </if>
+      <if test="longitude != null" >
+         and longitude = #{longitude}
+      </if>
+      <if test="latitude != null" >
+         and latitude = #{latitude}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, longitude, latitude
+  </sql>
+  <resultMap  id="ResultMapWithBLOBs" type="com.youedata.cd.industries.pojo.street.Street" extends="BaseResultMap" />
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_street
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    DELETE FROM  t_street
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    insert into t_street (name, longitude, latitude)
+    values (#{name}, #{longitude}, #{latitude})
+  </insert>
+  <insert id="insertSelective" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    insert into t_street
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id},
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    update t_street
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_street
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+    ORDER by
+    CONVERT (name USING gbk) COLLATE gbk_chinese_ci ASC
+  </select>
+  <select id="selectCount" resultType="java.lang.Long" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    select count(id) from t_street
+	<include refid="Example_Where_Clause" />
+  </select>
+  <select id="selectByMapPage" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_street
+	<include refid="Example_Where_Clause" />
+	<include refid="common.Order_Type" />
+	<include refid="common.Mysql_Pagination_Limit" />
+
+  </select>
+  <select id="selectByMapCount" resultType="java.lang.Long" parameterType="java.util.Map" >
+    select count(id) from t_street
+	<include refid="Example_Where_Clause" />
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into t_street (name,
+      longitude, latitude)
+    values 
+ <foreach collection="list" item="item" index="index" separator="," >   
+(#{item.name}, 
+      #{item.longitude}, #{item.latitude})
+ </foreach> 
+  </insert>
+  <update id="batchDelete" parameterType="java.util.List" >
+    UPDATE  t_street set is_deleted = 1 WHERE id IN
+	<foreach collection="list" item="ids"  open="(" separator="," close=")">     
+		#{ids}
+	</foreach>
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"></include>
+         ,tsum.tesum tsesum
+    from t_street ts
+    LEFT JOIN (
+    SELECT  COUNT(te.id) tesum,ts.id sid FROM t_enterprise_base  te
+    LEFT JOIN t_enterprise_log tel
+    ON te.source_log_id = tel.id
+    LEFT JOIN t_street ts
+    ON tel.street_id = ts.id
+    GROUP BY ts.id
+    ) tsum
+    ON ts.id = tsum.sid
+    ORDER by
+    CONVERT (ts.name USING gbk) COLLATE gbk_chinese_ci ASC
+
+  </select>
+  <select id="selectAllCount" resultType="java.lang.Long" >
+    select count(id) from t_street
+	 where is_deleted=0
+  </select>
+  <select id="findAllStreetName" resultType="com.youedata.cd.industries.pojo.street.Street">
+    select id,name
+    FROM t_street
+  </select>
+
+  <select id="selectByMap" resultMap="BaseResultMap" parameterType="com.youedata.cd.industries.pojo.street.Street" >
+    select
+    <include refid="Base_Column_List" />
+    from t_street
+    <include refid="Example_Where_Clause" />
+  </select>
+</mapper>
